@@ -1,0 +1,633 @@
+{
+  "org": {
+    "name": "Monarch Prime Labs",
+    "tagline": "Focused apps that keep your records yours",
+    "heroTitle": "Focused apps for people with real work to do.",
+    "heroText": "Monarch Prime Labs builds small, purpose-built apps: nutrition, training, study prep, league scorekeeping, and workplace tools. No ads, no trackers, no selling your data.",
+    "principles": [
+      {
+        "title": "Your records stay yours",
+        "detail": "Our apps store your data on your device by default. Where a feature needs the cloud, the page for that app says exactly what leaves the phone and why."
+      },
+      {
+        "title": "No ads, no trackers",
+        "detail": "No advertising SDKs, no third-party analytics, no data brokers. We do not sell or share personal information."
+      },
+      {
+        "title": "Pay once where we can",
+        "detail": "Most apps are free to download with a single one-time unlock. No account is required to use them."
+      }
+    ],
+    "contactText": "Questions, feedback, or support for any of our apps:",
+    "privacyIntro": "Each app has its own privacy policy. Pick the app to read what it stores, what (if anything) leaves your device, and how to reach us.",
+    "supportIntro": "Help pages for each app, with answers to the most common questions and how to contact us.",
+    "email": "monarchprimelabs@gmail.com",
+    "footerNote": "Built in New York.",
+    "baseUrl": "https://monarchprimelabs.github.io",
+    "copyrightYear": 2026
+  },
+  "apps": [
+    {
+      "key": "fuelring",
+      "name": "FuelRing",
+      "category": "Calorie & macro tracker",
+      "tagline": "Calorie & macro tracking that respects you. No account, no ads, no subscription.",
+      "summary": "FuelRing is a calorie and macro tracker that respects you: no account, no ads, no subscription, and no data collection. Everything you log stays on your phone. Download it free, log your food, and if you want the advanced features, unlock them once for a single price — forever.",
+      "status": "in_review",
+      "platforms": [
+        "iPhone"
+      ],
+      "languages": [
+        "English",
+        "Spanish"
+      ],
+      "pricing": "Free to download. FuelRing Pro is a $9.99 one-time in-app purchase that unlocks everything forever — no subscription.",
+      "pricingShort": "Free · $9.99 Pro, once",
+      "publisher": "Monarch Prime Labs",
+      "appStore": null,
+      "features": [
+        {
+          "title": "Nearly 1,400 foods built in",
+          "detail": "Every cut of steak and chicken, seafood, vegetables, fruit, grains, dairy, restaurant favorites from the chains you know, Mexican and Asian dishes, desserts, coffee drinks, street food, sauces, and supplements — plus 128 alcohol entries, from spirits and wine to nearly 30 cocktails and the beers and seltzers people actually drink. Fiber, sugar, sodium, saturated fat, and cholesterol on every food."
+        },
+        {
+          "title": "Barcode scanner that opens straight to the camera",
+          "detail": "Point your camera at a product and log it instantly — even liquor bottles, which carry no nutrition label; FuelRing works out the standard pour for you. Unknown codes can be looked up in Open Food Facts (you can turn this off), and any food you create can be linked to a barcode."
+        },
+        {
+          "title": "Color-coded rings",
+          "detail": "Calories, carbs, protein, and fat as rings that fill as you eat, with macros shown per meal, not just per day. Micronutrients appear as mini rings in a collapsible Nutrition section."
+        },
+        {
+          "title": "Import your history from MyFitnessPal or Cronometer",
+          "detail": "Coming from another tracker? Import your export file (CSV or .zip) and your meals, weigh-ins, and workouts come with you. Existing entries are never duplicated. Free by design."
+        },
+        {
+          "title": "Exercise, water, weight, and body measurements",
+          "detail": "An exercise log with 24 built-in activities that estimate calories from your body weight, water tracking with a goal you set, weight check-ins that adjust your calorie target, a smoothed trend line that ignores daily water-weight bounce, and waist, chest, arm, hip, and body-fat measurements."
+        },
+        {
+          "title": "A weekly view that banks calories",
+          "detail": "The weekly budget strip banks calories you save early in the week for the weekend, with judgment-free wording. Save any meal and log it again in one tap."
+        },
+        {
+          "title": "Dark mode and full Spanish",
+          "detail": "Complete Spanish localization — the interface, every food name, coach lines, and share text — with auto-detect on first run, plus auto, light, and dark appearance."
+        },
+        {
+          "title": "Works with Apple Health",
+          "detail": "FuelRing reads steps, active energy, and weight from Apple Health, so any device that syncs there works: Apple Watch, Garmin, Oura, Whoop, Withings, and more. Automatic sync is part of FuelRing Pro; without Pro you can import an Apple Health export file from Settings. Active energy is shown as its own Move ring and is never added to your calorie budget behind your back."
+        },
+        {
+          "title": "FuelRing Pro — one payment, yours forever",
+          "detail": "Your real burn (daily calorie burn measured from your own logs and weigh-ins), daily coach insights, 30-day and 90-day trends with consistency and streak tracking, a goal forecast from your real weigh-in trend, recipes logged by the serving, unlimited saved meals, automatic Apple Health sync, net-carbs mode, and diary export to a spreadsheet."
+        },
+        {
+          "title": "Built around your privacy",
+          "detail": "FuelRing has no servers. There is no account to create and nothing to sign in to, because there is nowhere for your information to go. The single optional network feature is looking up an unrecognized barcode, and the only thing sent is the barcode number itself."
+        }
+      ],
+      "privacy": {
+        "hasPolicy": true,
+        "lastUpdated": "30 July 2026",
+        "dataPoints": [
+          "No accounts, no analytics, no advertising SDKs, no tracking. FuelRing collects nothing.",
+          "Your profile, diary, custom foods, saved meals, weigh-ins, water, and exercise are stored only on your phone. There is no server.",
+          "One optional network request: looking up an unrecognized barcode in Open Food Facts. Only the barcode number is sent, and you can turn it off in Settings.",
+          "Apple Health access is read-only (steps, active energy, weight) and stays on your device. FuelRing never writes to Apple Health and never transmits Health data.",
+          "FuelRing Pro is a one-time purchase handled entirely by Apple. We never see your payment details.",
+          "Backups and CSV exports are created on your device and saved wherever you choose."
+        ]
+      },
+      "support": {
+        "email": "monarchprimelabs@gmail.com",
+        "faq": []
+      },
+      "disclaimers": [
+        "Nutrition values in the built-in food database are label and USDA approximations. Calorie goals use the Mifflin-St Jeor equation with safe minimums; FuelRing is not medical advice."
+      ]
+    },
+    {
+      "key": "monarch-prime-pin",
+      "name": "Monarch Prime Pin",
+      "category": "Research logbook",
+      "tagline": "Private peptide tracking, without the clutter.",
+      "summary": "Monarch Prime Pin is a private peptide tracking and site-rotation logbook built for clear, consistent recordkeeping. Research logs, schedules, inventory, and templates are stored locally on your device. Every amount, date, time, schedule, and note is entered by you — the app does not calculate, recommend, or prescribe anything. Start free with five saved records, then unlock Lifetime Pro once. No subscription.",
+      "status": "live",
+      "platforms": [
+        "iPhone"
+      ],
+      "languages": [
+        "English",
+        "Spanish",
+        "Portuguese (Brazil)"
+      ],
+      "pricing": "Free to download, with five saved records included. Lifetime Pro is a single one-time in-app purchase (price shown in the App Store) — no subscription. Customers who bought the app when it was a paid download keep full access.",
+      "pricingShort": "Free · Lifetime Pro, once",
+      "publisher": "Monarch Prime Labs",
+      "appStore": {
+        "id": "6770808426",
+        "url": "https://apps.apple.com/app/id6770808426"
+      },
+      "features": [
+        {
+          "title": "Manual research log",
+          "detail": "Log a compound, the amount in mg or mcg, the time, one or more sites on a front/back body map with 24 zones, symptom tags, weight, notes, and an optional progress photo. Edit or delete any record."
+        },
+        {
+          "title": "Site rotation heatmap",
+          "detail": "The dashboard body map colors each zone by how often you logged it recently, across 7-day, 30-day, 90-day, and all-time windows with a day scrubber. Color shows logged frequency only."
+        },
+        {
+          "title": "Complete history and calendar",
+          "detail": "A searchable log with full record details for every user. Lifetime Pro adds a calendar view with backdated entries and a photos grid that compares two progress photos side by side."
+        },
+        {
+          "title": "Reports and shareable summaries (Pro)",
+          "detail": "Monthly summaries, weekly frequency for the last eight weeks, weight trend, top compounds, symptom reports, and site usage — shared as text or PDF through the system share sheet."
+        },
+        {
+          "title": "Schedules and local reminders (Pro)",
+          "detail": "Dated entries you create that repeat once, daily, or weekly, with an optional on-device reminder that repeats only the title, date, and time you entered. No push notifications."
+        },
+        {
+          "title": "Inventory and record templates (Pro)",
+          "detail": "Track containers with quantity, dates, and a low-stock level, and save reusable templates for faster logging."
+        },
+        {
+          "title": "Concentration worksheet (Pro)",
+          "detail": "Divides a total mass you enter by a liquid volume you enter and converts that volume into U-100 syringe marking references. It does not calculate, recommend, or prescribe amounts and is not connected to your records."
+        },
+        {
+          "title": "Privacy and app lock",
+          "detail": "Optional Face ID or device-passcode lock, plus a privacy cover that hides record content in the app switcher. Free for everyone."
+        },
+        {
+          "title": "Backup, restore, and CSV export",
+          "detail": "Export everything as a single backup file you control and restore it on a new phone, or share your records as a CSV spreadsheet. Free for everyone."
+        },
+        {
+          "title": "Three languages, light and dark",
+          "detail": "English, Spanish, and Brazilian Portuguese, chosen automatically from your device language and changeable any time, with a dark or light theme."
+        }
+      ],
+      "privacy": {
+        "hasPolicy": false,
+        "lastUpdated": "2 September 2026",
+        "summary": "A local-first app. Your records stay on your phone.",
+        "dataPoints": [
+          "All research logs, schedules, inventory, templates, and settings are stored on your device. No server is involved.",
+          "No analytics, crash reporting, advertising, or tracking SDKs. The app never sends push notifications.",
+          "The sign-in screen asks for a name and email, but no cloud service is configured in the shipped app: nothing is verified or uploaded, and the profile is kept only on your phone.",
+          "Camera and photo library are used only when you attach a progress photo to a record. Photos stay inside the app on your device.",
+          "Notification permission is requested when you save a schedule entry with its Local reminder switch on. Reminders are scheduled on the device.",
+          "Face ID or your device passcode is used only if you turn on the app lock; the app never handles biometric data itself.",
+          "Lifetime Pro is a one-time purchase processed by Apple. The app only receives a yes/no answer about whether it was bought.",
+          "Data leaves the phone only when you share it yourself: a backup file, a CSV export, a report, or a progress card.",
+          "Deleting your account in Settings erases the local profile and all records from the phone. Uninstalling the app does the same."
+        ],
+        "notice": "This page summarizes how the app handles data. A full privacy policy for Monarch Prime Pin is being finalized and will be published here."
+      },
+      "support": {
+        "email": "monarchprimelabs@gmail.com",
+        "faq": [
+          {
+            "q": "Where is my data stored? Do I need an account?",
+            "a": "Your logs and organization-tool entries are stored locally on this device. The sign-in screen asks for an email and password, but in the shipped app no cloud service is configured: nothing is verified or uploaded, and only your name and email are kept on the phone as a local profile."
+          },
+          {
+            "q": "How do I move my records to a new phone or keep a backup?",
+            "a": "Tools → Settings & Access → Data Backup → Export Backup File creates a single file containing all records, schedules, inventory, and templates. Save it wherever you choose and Import it on the new phone. Photos, reminders, and Pro status are not included: restore Pro with Restore Prior Purchase and re-create reminders after importing."
+          },
+          {
+            "q": "What is Lifetime Pro and how do I restore a purchase?",
+            "a": "Free installs include five saved records. Lifetime Pro is a one-time payment billed once through the App Store — no subscription — that unlocks unlimited logging, calendar and photo history, reports, schedules and reminders, inventory, templates, and the concentration worksheet. If you reinstall or change phones, open the Pro screen and tap Restore Prior Purchase while signed into the same Apple ID."
+          },
+          {
+            "q": "Which permissions does the app ask for, and why?",
+            "a": "Camera and photo library only when you attach a progress photo. Notifications when you save a schedule entry with the Local reminder switch on (it is on by default; turn it off to save without a reminder). Face ID or your passcode only if you enable Privacy & App Lock. The app never sends push notifications and has no analytics or tracking."
+          },
+          {
+            "q": "The Save button shows an error.",
+            "a": "The button validates before saving. An alert means a required field is missing (compound, amount, or at least one site) or the exact time is invalid. On the free plan, saving a sixth record opens the Lifetime Pro screen instead."
+          },
+          {
+            "q": "How do I erase all my data from this phone?",
+            "a": "Open Tools → Settings & Access → Reminders and tap Delete Account & Local Data at the bottom. This removes the local profile, all records, schedules, inventory, and templates, and cancels reminders. Signing out alone only removes the local profile — your records stay on the phone. Deleting and reinstalling the app also clears everything."
+          }
+        ]
+      },
+      "disclaimers": [
+        "FOR RESEARCH USE ONLY — not for human consumption. All peptides, compounds, and substances referenced in this application are intended solely for research purposes in controlled laboratory settings. These substances are not approved for human consumption, self-administration, or therapeutic use by any regulatory authority including the FDA, EMA, or equivalent bodies.",
+        "Monarch Prime Pin is a research data logging tool only. It does not constitute medical advice, diagnosis, or treatment recommendations, and it does not calculate, recommend, or prescribe dosages. All record and schedule entries are manually entered by the user. See the Legal section in the app's Settings for the full disclaimer."
+      ]
+    },
+    {
+      "key": "cdl-prep-pro",
+      "name": "CDL Prep Pro",
+      "category": "CDL pre-trip & air brake prep",
+      "tagline": "Verbal CDL pre-trip scripts, air brake walkthroughs, and section quizzes.",
+      "summary": "CDL Prep Pro is a focused study app for the CDL pre-trip inspection, air brake test, and in-cab safety check. Built for CDL students preparing for the road test, the scripts are word-for-word what your examiner expects to hear. The full Form A walkthrough, two quiz rounds, and the Acronym Cheat Sheet are always free; one $9.99 in-app purchase unlocks the complete study library with no subscription.",
+      "status": "testflight",
+      "platforms": [
+        "iPhone",
+        "iPad"
+      ],
+      "languages": [
+        "English"
+      ],
+      "pricing": "Free download. One $9.99 in-app purchase unlocks the full study library. No subscription, no recurring charges.",
+      "pricingShort": "Free · $9.99 unlock, once",
+      "publisher": "Revival Fitness Athletics LLC",
+      "appStore": null,
+      "features": [
+        {
+          "title": "Pre-Trip Inspection",
+          "detail": "Walk through every part with the exact verbal scripts you say to the examiner. Form A (front) and Form B (rear) covered in full."
+        },
+        {
+          "title": "Air Brake Test",
+          "detail": "The in-cab steps in order, with verbal scripts and pass criteria for each. The optional wheel-chock step appears when Include chocks is turned on in Profile."
+        },
+        {
+          "title": "In-Cab Safety",
+          "detail": "Seat belt, emergency equipment, gauges, mirrors, wipers, heater and defrost. Every item, every script."
+        },
+        {
+          "title": "Acronym Cheat Sheet",
+          "detail": "PMS, CBB, ABC, SOR/ARM, BLUSH, LBS, I-D-C, DOG, and ALAMPS. Expand any one to see what it means and where to use it."
+        },
+        {
+          "title": "Flashcards",
+          "detail": "Quick acronym review with Hard / Good / Easy study controls."
+        },
+        {
+          "title": "Section Quizzes",
+          "detail": "Pick Pre-Trip, Air Brake, In-Cab, Road Test, Focused Review, or mix them all, with answer feedback after each question."
+        },
+        {
+          "title": "Progress Tracking",
+          "detail": "Study streak, questions answered, completed quizzes, and average score, stored on your device."
+        },
+        {
+          "title": "Dark Mode",
+          "detail": "For studying before a shift. Switch it on from Profile; the preference is saved on your device."
+        },
+        {
+          "title": "Search and Compare Trucks",
+          "detail": "Search inspection items, air brake steps, and acronyms from the home screen, plus a Training vs Test Day Truck reference for drivers who train on a conventional hood but test on a cab-over."
+        }
+      ],
+      "privacy": {
+        "hasPolicy": true,
+        "lastUpdated": "June 14, 2026",
+        "dataPoints": [
+          "No account is required and no personal information is collected. Your display name is stored only on your device.",
+          "The app requests no permissions: no location, contacts, photos, microphone, or camera.",
+          "No third-party analytics, ad networks, or trackers.",
+          "Your name, preferences, quiz stats, streak, lesson progress, and purchase-unlock status are kept on the device and removed when you uninstall.",
+          "The in-app purchase is processed by Apple under Apple's privacy policy; the app stores only the local unlock status."
+        ]
+      },
+      "support": {
+        "email": "monarchprimelabs@gmail.com",
+        "faq": [
+          {
+            "q": "How do I contact support?",
+            "a": "Email monarchprimelabs@gmail.com with a description of the issue and the device you are using."
+          },
+          {
+            "q": "How do I restore my purchase on a new phone or after reinstalling?",
+            "a": "CDL Prep Pro offers one full-library unlock. If you previously purchased it, open Profile and select Restore purchase while signed into the same Apple ID."
+          },
+          {
+            "q": "Is CDL Prep Pro a subscription?",
+            "a": "No. The full study library is a one-time $9.99 in-app purchase charged to your Apple ID at confirmation. No subscription, no recurring charges."
+          },
+          {
+            "q": "What can I use without buying anything?",
+            "a": "The full Form A walkthrough, two free quiz rounds, and the Acronym Cheat Sheet are always free. Form B, the Air Brake Test, In-Cab Safety, and further quiz rounds unlock with the purchase."
+          },
+          {
+            "q": "Do I need an account, and where is my data stored?",
+            "a": "No account is required. Your display name, preferences, and study progress are stored locally on your device. Profile offers Clear study history and Delete account; Delete account also clears the local unlock status, which you can bring back with Restore purchase. Uninstalling the app removes all local data."
+          },
+          {
+            "q": "What permissions does the app need?",
+            "a": "None. The app does not request location, contacts, photos, microphone, or camera access, and it uses no third-party analytics, ad networks, or trackers."
+          }
+        ]
+      },
+      "disclaimers": [
+        "CDL Prep Pro is an independent study aid for Class B pre-trip, air brake, and in-cab inspections. It is not affiliated with or endorsed by any DMV, state licensing agency, or the FMCSA."
+      ]
+    },
+    {
+      "key": "revivex",
+      "name": "ReviveX",
+      "category": "Hybrid fitness tracker",
+      "tagline": "Lift. Run. Revive.",
+      "summary": "ReviveX is a hybrid fitness tracker for lifting, running, conditioning, routines, and progress analytics, built to help everyday athletes rebuild the athlete inside them one session at a time. Training data stays on your device: no accounts, no cloud storage, no analytics, no ads, and no tracking.",
+      "status": "in_development",
+      "platforms": [
+        "iPhone",
+        "Android (in development)"
+      ],
+      "languages": [
+        "English"
+      ],
+      "pricing": "Free while in development. A ReviveX Pro membership (a monthly plan and an annual plan with a 7-day free trial) is planned; nothing is gated today.",
+      "pricingShort": "Free during development",
+      "publisher": "Monarch Prime Labs",
+      "appStore": null,
+      "features": [
+        {
+          "title": "Strength workout logger",
+          "detail": "Start an empty workout or a routine, pick from a 74-exercise library with original illustrations, log weight and reps per set, and get a rest timer, a plate calculator, last-session numbers under each exercise, and a PR celebration when you finish."
+        },
+        {
+          "title": "Routine builder",
+          "detail": "Create and edit routines with per-exercise target sets, reps, weight, and rest; start a workout from any routine, or turn a completed workout into a routine template in one tap."
+        },
+        {
+          "title": "Run tracking, outdoors or indoors",
+          "detail": "Outdoor runs use GPS for live distance, moving time, rolling and average pace, and auto-lap splits, with the route drawn on a map. Indoor mode is a timer-based treadmill log, and runs can also be logged manually."
+        },
+        {
+          "title": "Hybrid sessions and HYROX race simulation",
+          "detail": "Log hybrid sessions segment by segment, or run the live race player: 8 stations in official order with Open/Pro and Men/Women load standards, a live race clock, per-segment timers, one-tap station completion, and splits."
+        },
+        {
+          "title": "Progress analytics",
+          "detail": "A weekly training summary across lifts, runs, and hybrid sessions with week-over-week deltas; PR history and per-exercise trends with estimated 1RM; training streaks and milestones; and a body weight log with trend."
+        },
+        {
+          "title": "Apple Health and Health Connect sync",
+          "detail": "Optionally write workouts, runs, hybrid sessions, and body weight to Apple Health or Health Connect, import watch-recorded workouts, and see heart rate, active energy, and daily rings. Optional and revocable at any time."
+        },
+        {
+          "title": "Share cards and data export",
+          "detail": "Create ReviveX-branded recap cards for any workout, run, or hybrid session and export them as images (GPS runs include the route trace); export your complete local dataset as a file from the Profile screen."
+        },
+        {
+          "title": "Local-first and private",
+          "detail": "Your profile, workouts, routines, runs, hybrid sessions, and body weight live only on your device. No sign-in is required, and your training data is never uploaded — share cards and exports go only where you send them."
+        }
+      ],
+      "privacy": {
+        "hasPolicy": true,
+        "lastUpdated": "July 6, 2026",
+        "dataPoints": [
+          "All training data is stored only on your device. No accounts, no cloud storage, no analytics, no ads.",
+          "Location is used only during an active GPS run and is stored locally with that run. GPS is optional.",
+          "Apple Health and Health Connect access is optional, used only for in-app features, never sold or shared.",
+          "Share cards and exports are created only when you tap share or export.",
+          "In the native iOS build, run routes are drawn on an Apple Maps view, which loads map imagery from Apple."
+        ],
+        "notice": "Draft. ReviveX has not been released yet; this policy will be finalized before release. Two items are still being added to it: the app also reads daily step counts from Apple Health / Health Connect, and run routes in the native iOS build are shown on an Apple Maps view."
+      },
+      "support": {
+        "email": "monarchprimelabs@gmail.com",
+        "faq": [
+          {
+            "q": "Is ReviveX available to download yet?",
+            "a": "Not yet. ReviveX is in development and is not on the App Store, Google Play, or TestFlight. Check back here for availability."
+          },
+          {
+            "q": "Does ReviveX cost anything, and how do purchases work?",
+            "a": "Everything in the app is currently free and unlocked. A ReviveX Pro membership (a monthly plan and an annual plan with a 7-day free trial) is built in but switched off. When it is enabled on iOS, purchases and Restore Purchases go through your Apple ID, and subscriptions can be managed or cancelled in your App Store account settings."
+          },
+          {
+            "q": "Where is my training data stored?",
+            "a": "On your device only. Workouts, routines, runs, hybrid sessions, body weight, and GPS routes live in the app's local storage. There are no accounts and no cloud backup. You can export your complete dataset from the Profile screen, and uninstalling the app deletes all app data."
+          },
+          {
+            "q": "What permissions does ReviveX ask for?",
+            "a": "Location, requested only when you start an outdoor GPS run (with an optional always-allow permission so tracking continues while the screen is locked during an active run), and Apple Health or Health Connect if you choose to connect them. Both are optional."
+          },
+          {
+            "q": "Do I need an account?",
+            "a": "No. Your profile is local and private. The app contains an optional community sign-in screen, but it is not configured or active in the current build."
+          }
+        ]
+      },
+      "disclaimers": [
+        "HYROX is a trademark of its owner. ReviveX is an independent app and is not affiliated with or endorsed by HYROX."
+      ]
+    },
+    {
+      "key": "scorebook",
+      "name": "Scorebook",
+      "category": "Slow-pitch league scoring",
+      "tagline": "Slow-pitch league scoring: one tap per at-bat, live for everyone who couldn't make the game.",
+      "summary": "Scorebook is league management for adult slow-pitch and modified softball: one tap per plate appearance for the scorekeeper; live scores, box scores, and auto-derived stats (AVG, OBP, SLG, RA/9, leaderboards) for everyone else. Scoring is append-only, so corrections are auditable and nothing is ever lost. It ships as a phone app for scorekeepers, players, and fans, plus a web dashboard for commissioners.",
+      "status": "testflight",
+      "platforms": [
+        "iPhone (scorekeeper & fan app)",
+        "Web (commissioner dashboard)"
+      ],
+      "languages": [
+        "English"
+      ],
+      "pricing": "Pricing to be announced.",
+      "pricingShort": "Pricing to be announced",
+      "publisher": "Monarch Prime Labs",
+      "appStore": null,
+      "features": [
+        {
+          "title": "One tap per plate appearance",
+          "detail": "Built to be used one-handed, at dusk, by a volunteer who wants to go home: dark, high-contrast, big touch targets. A hit applies default runner advancement and commits immediately; follow-up questions appear only when the outcome is genuinely ambiguous. Undo is always visible."
+        },
+        {
+          "title": "Works without park Wi-Fi",
+          "detail": "Every play is saved to an outbox on the phone the moment you tap it and sent in order when the connection comes back — even if the app is closed in between."
+        },
+        {
+          "title": "Live game view for players and fans",
+          "detail": "A read-only Watch view with scoreboard, line score, base diamond, play-by-play feed, and box score, updated live from the same log the scorekeeper writes."
+        },
+        {
+          "title": "Stats that fall out of the scorebook",
+          "detail": "AVG, OBP, SLG, total bases, RA/9, W-L, and standings are computed from the play-by-play — nothing is hand-entered. Career stats follow a player across seasons and leagues."
+        },
+        {
+          "title": "Lineups in the parking lot",
+          "detail": "Tap your game, and last game's lineup loads as the default: reorder, assign positions (10 fielders including LCF, RCF, and ROV, plus extra hitters), add a sub from the bench, confirm the rules, and Play Ball."
+        },
+        {
+          "title": "Scored on paper? Photograph the book",
+          "detail": "Photograph the away page and the home page; a transcription service reads the handwritten cells and the app rebuilds the game from them. Unreadable cells come back as question marks, never guesses, and you review and confirm everything before it is saved."
+        },
+        {
+          "title": "A digital scorebook for the league binder",
+          "detail": "Any game, live or final, renders as a classic printable paper scorecard in book notation, with the diamond path, runs, outs, RBIs, and the R/H/E line score."
+        },
+        {
+          "title": "Your league's rules, not someone else's",
+          "detail": "Innings, time limit, home-run limit, run limit per inning, mercy rule, flip-flop, courtesy runners, batting slots, and ties are set per season by the commissioner. Every game snapshots its rules at first pitch."
+        },
+        {
+          "title": "Commissioner tools and auditable game review",
+          "detail": "Standings with CSV export, a round-robin schedule builder, rosters with claim codes, and game review where any event can be voided and stats recompute. Every correction is a new entry; nothing is ever deleted."
+        },
+        {
+          "title": "Players are not users",
+          "detail": "Managers add players to a roster without anyone installing anything. When a player does sign in, a one-time claim code from their manager links the account to their roster spot and every stat already recorded under their name."
+        }
+      ],
+      "privacy": {
+        "hasPolicy": false,
+        "lastUpdated": "2 September 2026",
+        "summary": "Scorebook runs on a league backend, so some data lives on the league's server. Here is what, and who can see it.",
+        "dataPoints": [
+          "Sign-in is by email one-time code: you enter your email, receive a 6-digit code, and enter it. There are no passwords. Your session stays on the phone until you sign out.",
+          "Stored on the league's server: leagues, seasons, teams, rosters (player names, and email and phone if a manager entered them), lineups, the play-by-play log of every game, and the stats derived from it.",
+          "Every read requires a signed-in account. Other signed-in users of your league backend see roster names and stats; they cannot see your email, phone, or claim code.",
+          "Scoring history is permanent and auditable: plays are never deleted, and each one records who entered it and when. Corrections are new entries.",
+          "Photo scorecard import sends the photographed page and the team's roster names to a server-side transcription service (which uses the Anthropic API) so the handwriting can be read. The app does not keep the photo. The feature is optional and limited to managers, coaches, scorekeepers, and league staff.",
+          "On the phone: your signed-in session and an outbox of plays not yet sent, which empties as they sync.",
+          "Camera and photo library are used only to photograph paper scorebook pages.",
+          "No analytics, crash-reporting, advertising, or tracking SDKs.",
+          "Without a league backend the app runs in demo mode with fictional teams: no sign-in, no network."
+        ],
+        "notice": "Scorebook is in beta. A full privacy policy will be published here before public release."
+      },
+      "support": {
+        "email": "monarchprimelabs@gmail.com",
+        "faq": [
+          {
+            "q": "How do I sign in?",
+            "a": "Enter your email address and Scorebook emails you a 6-digit code; enter the code and you're in. There is no password to create or remember. Your session stays signed in on the phone until you tap sign out."
+          },
+          {
+            "q": "What is a claim code, and what if I don't have one?",
+            "a": "Your manager creates your roster spot before you ever install the app. A claim code links your account to that spot and to every stat already recorded under your name. Codes work once; if yours was lost or never arrived, your manager or league staff can issue a new one from the Rosters page. If you only want to watch games, tap Skip."
+          },
+          {
+            "q": "Does scoring work with no cell service at the field?",
+            "a": "Yes. Every play is saved to an outbox on the phone the moment you tap it and sent in order when the connection returns, even if the app is closed in between. If the server has plays you don't, the app resyncs from the server log and tells you."
+          },
+          {
+            "q": "Why does Scorebook ask for camera or photo access?",
+            "a": "Only for importing a paper scorebook. The feature is optional, needs the app connected to your league's backend, and is limited to managers, coaches, scorekeepers, and league staff. The photo is sent to the transcription service and is not stored by the app."
+          },
+          {
+            "q": "I scored a play wrong. How do I fix it?",
+            "a": "During the game, open Undo: it lists the last five plays and voids the one you pick, then replays the game cleanly. After the game, a commissioner can open Game Review in the dashboard, void any event, and stats recompute automatically. Nothing is ever deleted; every fix is a new correcting entry."
+          }
+        ]
+      },
+      "disclaimers": [
+        "Scorebook needs a league backend set up by the league. Without one, the app runs in demo mode with fictional teams and cannot sign in, sync, or import photos."
+      ]
+    },
+    {
+      "key": "sanchart",
+      "name": "SanChart",
+      "category": "Work companion for NYC sanitation workers",
+      "tagline": "Your chart. Your pay. Your career.",
+      "summary": "SanChart is an independent, local-first work companion for NYC sanitation workers: chart and schedule visibility, work logging, payroll estimation and auditing, leave tracking, and field references. All records live in an on-device database — no SanChart account, no login, no developer-operated user database, no analytics. The foundation (chart and salary engines, onboarding, and the Today dashboard) is built; Calendar, Work Log, Pay, and Field arrive in later phases.",
+      "status": "in_development",
+      "platforms": [
+        "iPhone",
+        "iPad",
+        "Android (planned)"
+      ],
+      "languages": [
+        "English"
+      ],
+      "pricing": "Pricing to be announced.",
+      "pricingShort": "Pricing to be announced",
+      "publisher": "Monarch Prime Labs",
+      "appStore": null,
+      "features": [
+        {
+          "title": "Chart-day visibility for every rotation",
+          "detail": "A chart day is your scheduled day off. Engines cover SW 1–25 (25-week cycle), Officer F1–F6 (6-week cycle), A/B (two-week repeat), the fixed Saturday chart, and Custom. Rotations never reset on January 1 and work backward and forward in time."
+        },
+        {
+          "title": "Today dashboard",
+          "detail": "Today's chart-day status, next chart day with a countdown, current service step with annual, hourly, and daily rates, next pay-step countdown, and a Log Today button."
+        },
+        {
+          "title": "Salary engine with verified rate formulas",
+          "detail": "Seven service steps driven by your appointment-date anniversaries, seeded contract schedules, and the verified daily (annual ÷ 261) and hourly (annual ÷ 2,088) rate formulas, calculated in exact cents."
+        },
+        {
+          "title": "Never invent a rule",
+          "detail": "Every chart and payroll rule carries provenance — verified, worker-confirmed, or unverified. Unknown rules stay configurable, and anything unresolved is flagged for verification instead of guessed."
+        },
+        {
+          "title": "Local-first, no account",
+          "detail": "All records live in an on-device database. No SanChart account, no login, no developer-operated user database, no analytics or telemetry."
+        },
+        {
+          "title": "Onboarding with no account, email, or password",
+          "detail": "Appointment date, borough, home garage, chart type and number, tour presets, appearance, and biometric preference — that's it."
+        },
+        {
+          "title": "System, light, and dark appearance",
+          "detail": "Three appearance modes with a live preview during onboarding, switchable any time in Settings."
+        },
+        {
+          "title": "Phone and tablet layouts",
+          "detail": "Bottom tabs on phones; a sidebar rail and multi-column dashboard on tablets — a real tablet layout, not a stretched phone screen."
+        },
+        {
+          "title": "Home garage and chart history that never rewrites the past",
+          "detail": "A transfer closes the previous assignment and appends a new one; old work and payroll history is never deleted or rewritten, and temporary sent-out days never change your home garage."
+        },
+        {
+          "title": "Glove-friendly design",
+          "detail": "Big tap targets and a field-tested palette, with crash-safe handling that turns bad saved data into a repair prompt instead of a crash."
+        }
+      ],
+      "privacy": {
+        "hasPolicy": false,
+        "lastUpdated": "2 September 2026",
+        "summary": "Your work records are not transmitted to or stored on SanChart-operated servers.",
+        "dataPoints": [
+          "All records live in an on-device database. There is no SanChart account, no login, and no developer-operated user database.",
+          "No analytics or telemetry. No Firebase, Supabase, or any remote database.",
+          "Your work records are not transmitted to or stored on SanChart-operated servers. Optional backups are created and controlled by you.",
+          "The only permission declared is optional Face ID / Touch ID for the app lock: \"SanChart can use Face ID to unlock the app. Your data stays on this device.\" No location, camera, contacts, or notification permissions.",
+          "Encrypted backup and restore are designed but not yet available; they arrive in a later update."
+        ],
+        "notice": "SanChart is in development. A full privacy policy will be published here before release."
+      },
+      "support": {
+        "email": "monarchprimelabs@gmail.com",
+        "faq": [
+          {
+            "q": "Do I need an account to use SanChart?",
+            "a": "No. SanChart keeps your chart, pay, and career records on this device. No account, no login. Onboarding asks for no email or password."
+          },
+          {
+            "q": "Where is my data stored, and does SanChart send it anywhere?",
+            "a": "All records live in an on-device database. Your work records are not transmitted to or stored on SanChart-operated servers. Optional backups are created and controlled by you. There is no analytics or telemetry."
+          },
+          {
+            "q": "Can I back up or restore my data?",
+            "a": "Not yet. Encrypted backup and restore are coming in a later update. For now, start with a new profile; your records stay on this device."
+          },
+          {
+            "q": "What permissions does SanChart ask for?",
+            "a": "Only optional Face ID / Touch ID for the biometric app lock. No location, camera, contacts, or notification permissions."
+          },
+          {
+            "q": "Is SanChart an official City of New York or DSNY app?",
+            "a": "No. SanChart is an independent app. It is not an official City of New York or DSNY application, and it uses no NYC seal, DSNY logo, or government crest."
+          },
+          {
+            "q": "Which chart types does SanChart support?",
+            "a": "Sanitation Worker SW charts 1–25 (25-week rotation), Officer F1–F6 (6-week rotation), the two-week A/B schedule, the fixed Saturday chart, and Custom (no baseline rotation; record days manually)."
+          }
+        ]
+      },
+      "disclaimers": [
+        "SanChart is an independent app. It is not an official City of New York or DSNY application, and it uses no NYC seal, DSNY logo, or government crest.",
+        "Chart and payroll figures carry provenance (verified, worker-confirmed, or unverified). Several payroll rules are intentionally not implemented yet and are flagged for verification rather than guessed. SanChart is an estimate and reference tool, not an official payroll record."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scorebook — Slow-pitch league scoring: one tap per at-bat, live for everyone who couldn&#39;t make the game.</title>
+<meta name="description" content="Scorebook is league management for adult slow-pitch and modified softball: one tap per plate appearance for the scorekeeper; live scores, box scores, and auto-derived stats (AVG, OBP, SLG, RA/9, leaderboards) for everyone else. Scoring is append-only, so corrections are auditable and nothing is ever lost. It ships as a phone app for scorekeepers, players, and fans, plus a web dashboard for commissioners.">
+<meta property="og:title" content="Scorebook — Slow-pitch league scoring: one tap per at-bat, live for everyone who couldn&#39;t make the game.">
+<meta property="og:description" content="Scorebook is league management for adult slow-pitch and modified softball: one tap per plate appearance for the scorekeeper; live scores, box scores, and auto-derived stats (AVG, OBP, SLG, RA/9, leaderboards) for everyone else. Scoring is append-only, so corrections are auditable and nothing is ever lost. It ships as a phone app for scorekeepers, players, and fans, plus a web dashboard for commissioners.">
+<meta property="og:type" content="website">
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/icons/monarch-prime-labs.png">
+<link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="../../"><img src="../../assets/icons/monarch-prime-labs.png" alt="" width="28" height="28">Monarch Prime Labs</a>
+  <nav class="nav"><a href="../../#apps" aria-current="page">Apps</a><a href="../../privacy/">Privacy</a><a href="../../support/">Support</a></nav>
+</div></header>
+
+<section class="hero app"><div class="wrap">
+  <div class="row"><img src="../../assets/icons/scorebook.png" alt="Scorebook icon" width="96" height="96">
+  <div><h1>Scorebook</h1><p class="tag">Slow-pitch league scoring: one tap per at-bat, live for everyone who couldn&#39;t make the game.</p><span class="badge testflight">In beta testing</span></div></div>
+  <div class="cta"><span class="btn ghost">In beta testing</span><a class="btn ghost" href="support.html">Support</a><a class="btn ghost" href="privacy.html">Privacy</a></div>
+</div></section>
+<main><div class="wrap">
+  <section class="section card"><h2>About</h2><p style="margin:0">Scorebook is league management for adult slow-pitch and modified softball: one tap per plate appearance for the scorekeeper; live scores, box scores, and auto-derived stats (AVG, OBP, SLG, RA/9, leaderboards) for everyone else. Scoring is append-only, so corrections are auditable and nothing is ever lost. It ships as a phone app for scorekeepers, players, and fans, plus a web dashboard for commissioners.</p></section>
+  <section class="section card"><h2>What it does</h2><ul class="feat"><li><strong>One tap per plate appearance</strong><span>Built to be used one-handed, at dusk, by a volunteer who wants to go home: dark, high-contrast, big touch targets. A hit applies default runner advancement and commits immediately; follow-up questions appear only when the outcome is genuinely ambiguous. Undo is always visible.</span></li><li><strong>Works without park Wi-Fi</strong><span>Every play is saved to an outbox on the phone the moment you tap it and sent in order when the connection comes back — even if the app is closed in between.</span></li><li><strong>Live game view for players and fans</strong><span>A read-only Watch view with scoreboard, line score, base diamond, play-by-play feed, and box score, updated live from the same log the scorekeeper writes.</span></li><li><strong>Stats that fall out of the scorebook</strong><span>AVG, OBP, SLG, total bases, RA/9, W-L, and standings are computed from the play-by-play — nothing is hand-entered. Career stats follow a player across seasons and leagues.</span></li><li><strong>Lineups in the parking lot</strong><span>Tap your game, and last game&#39;s lineup loads as the default: reorder, assign positions (10 fielders including LCF, RCF, and ROV, plus extra hitters), add a sub from the bench, confirm the rules, and Play Ball.</span></li><li><strong>Scored on paper? Photograph the book</strong><span>Photograph the away page and the home page; a transcription service reads the handwritten cells and the app rebuilds the game from them. Unreadable cells come back as question marks, never guesses, and you review and confirm everything before it is saved.</span></li><li><strong>A digital scorebook for the league binder</strong><span>Any game, live or final, renders as a classic printable paper scorecard in book notation, with the diamond path, runs, outs, RBIs, and the R/H/E line score.</span></li><li><strong>Your league&#39;s rules, not someone else&#39;s</strong><span>Innings, time limit, home-run limit, run limit per inning, mercy rule, flip-flop, courtesy runners, batting slots, and ties are set per season by the commissioner. Every game snapshots its rules at first pitch.</span></li><li><strong>Commissioner tools and auditable game review</strong><span>Standings with CSV export, a round-robin schedule builder, rosters with claim codes, and game review where any event can be voided and stats recompute. Every correction is a new entry; nothing is ever deleted.</span></li><li><strong>Players are not users</strong><span>Managers add players to a roster without anyone installing anything. When a player does sign in, a one-time claim code from their manager links the account to their roster spot and every stat already recorded under their name.</span></li></ul></section>
+  <div class="grid two section">
+    <section class="card"><h2>Details</h2><dl class="kv">
+      <dt>Price</dt><dd>Pricing to be announced.</dd>
+      <dt>Platforms</dt><dd>iPhone (scorekeeper &amp; fan app), Web (commissioner dashboard)</dd>
+      <dt>Languages</dt><dd>English</dd>
+      <dt>Publisher</dt><dd>Monarch Prime Labs</dd>
+    </dl></section>
+    <section class="card"><h2>Your data</h2><ul class="points"><li>Sign-in is by email one-time code: you enter your email, receive a 6-digit code, and enter it. There are no passwords. Your session stays on the phone until you sign out.</li><li>Stored on the league&#39;s server: leagues, seasons, teams, rosters (player names, and email and phone if a manager entered them), lineups, the play-by-play log of every game, and the stats derived from it.</li><li>Every read requires a signed-in account. Other signed-in users of your league backend see roster names and stats; they cannot see your email, phone, or claim code.</li><li>Scoring history is permanent and auditable: plays are never deleted, and each one records who entered it and when. Corrections are new entries.</li><li>Photo scorecard import sends the photographed page and the team&#39;s roster names to a server-side transcription service (which uses the Anthropic API) so the handwriting can be read. The app does not keep the photo. The feature is optional and limited to managers, coaches, scorekeepers, and league staff.</li><li>On the phone: your signed-in session and an outbox of plays not yet sent, which empties as they sync.</li><li>Camera and photo library are used only to photograph paper scorebook pages.</li><li>No analytics, crash-reporting, advertising, or tracking SDKs.</li><li>Without a league backend the app runs in demo mode with fictional teams: no sign-in, no network.</li></ul><p><a href="privacy.html">Privacy at a glance →</a></p></section>
+  </div>
+  <section class="section"><div class="note">Scorebook needs a league backend set up by the league. Without one, the app runs in demo mode with fictional teams and cannot sign in, sync, or import photos.</div></section>
+</div></main>
+<footer><div class="wrap">
+  <span>© 2026 Monarch Prime Labs. Built in New York.</span>
+  <span><a href="mailto:monarchprimelabs@gmail.com">monarchprimelabs@gmail.com</a> · <a href="../../privacy/">Privacy</a> · <a href="../../support/">Support</a></span>
+</div></footer>
+</body>
+</html>
