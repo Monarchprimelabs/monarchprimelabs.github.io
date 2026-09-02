@@ -376,15 +376,15 @@
       ],
       "privacy": {
         "hasPolicy": true,
-        "lastUpdated": "July 6, 2026",
+        "lastUpdated": "September 2, 2026",
         "dataPoints": [
           "All training data is stored only on your device. No accounts, no cloud storage, no analytics, no ads.",
           "Location is used only during an active GPS run and is stored locally with that run. GPS is optional.",
-          "Apple Health and Health Connect access is optional, used only for in-app features, never sold or shared.",
+          "Apple Health and Health Connect access is optional: workouts, heart rate, active energy, daily steps, and (on Android) run distance, used only for in-app features, never sold or shared.",
           "Share cards and exports are created only when you tap share or export.",
           "In the native iOS build, run routes are drawn on an Apple Maps view, which loads map imagery from Apple."
         ],
-        "notice": "Draft. ReviveX has not been released yet; this policy will be finalized before release. Two items are still being added to it: the app also reads daily step counts from Apple Health / Health Connect, and run routes in the native iOS build are shown on an Apple Maps view."
+        "notice": "Draft. ReviveX has not been released yet; this policy will be finalized before release."
       },
       "support": {
         "email": "monarchprimelabs@gmail.com",

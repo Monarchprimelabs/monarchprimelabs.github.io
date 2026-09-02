@@ -1,5 +1,6 @@
 <h1>ReviveX Privacy Policy</h1>
 <p><strong>Effective date: July 6, 2026</strong></p>
+<p><strong>Last updated: September 2, 2026</strong></p>
 <p>ReviveX (&quot;the app&quot;) is a fitness tracker published by Revival Fitness /
 Monarch Prime Labs. This policy explains what data the app handles and how.
 The short version: <strong>your data stays on your device.</strong> ReviveX has no
@@ -14,21 +15,39 @@ storage:</p>
 <li>Health sync settings and bookkeeping (which items have been synced)</li>
 </ul>
 <p>We (the developers) cannot see, access, or recover any of this data. It never
-leaves your device unless you explicitly share or export it.</p>
+leaves your device unless you explicitly share or export it. The one thing the
+app does request from outside is map imagery, on iOS only, to draw a run&#39;s
+route on a map — see &quot;Maps&quot; below; the run itself is not sent.</p>
 <h2>Location (GPS runs)</h2>
 <p>If you start a GPS run, the app uses your device&#39;s location to measure
 distance, pace, splits, and route — while the run is active. With background
 permission granted, tracking continues while the screen is locked <strong>during an
 active run only</strong>. Location data is stored locally as part of the saved run
-and is never transmitted to us or any third party. You can use the entire app
-without granting location access; GPS tracking is optional.</p>
+and is never uploaded to us or to any third party. (On iOS, displaying the
+saved route on a map does request map imagery for the area around it from
+Apple&#39;s map service — the route itself is not sent; see &quot;Maps&quot; below.) You
+can use the entire app without granting location access; GPS tracking is
+optional.</p>
+<h2>Maps</h2>
+<p>On iOS, ReviveX draws the route of a saved GPS run on an Apple Maps view. To
+render that view, the device requests map imagery (map tiles) for the area
+around the route from Apple&#39;s map servers — the same request any app that
+shows a map makes. ReviveX attaches no account, name, or identifier of yours
+to that request, and the run itself (route points, splits, times) is never
+uploaded; only the map area to draw is requested. Apple&#39;s privacy policy
+governs the map service: <a href="https://www.apple.com/legal/privacy/">https://www.apple.com/legal/privacy/</a>. On Android,
+and in builds without the native map module (such as Expo Go), the app draws
+a simple local trace of the route instead and requests nothing from any map
+service.</p>
 <h2>Apple Health and Health Connect</h2>
 <p>If you choose to connect Apple Health (iOS) or Health Connect (Android):</p>
 <ul>
 <li>ReviveX <strong>writes</strong> your workouts, runs, hybrid sessions, and body weight to
 the health store on your device.</li>
-<li>ReviveX <strong>reads</strong> workouts (e.g., recorded by your watch), heart rate, and
-active energy to display and import into your local training log.</li>
+<li>ReviveX <strong>reads</strong> workouts (e.g., recorded by your watch), heart rate,
+active energy, your daily step count, and (on Android) the distance
+recorded for an imported run, to display them in the app (watch metrics,
+daily activity rings) and import workouts into your local training log.</li>
 </ul>
 <p>Health data is used solely to provide these in-app features. It is never used
 for advertising, marketing, or data mining, never sold, and never disclosed
@@ -41,7 +60,8 @@ share sheet. Nothing is shared automatically.</p>
 <h2>What we don&#39;t do</h2>
 <ul>
 <li>No user accounts or sign-in</li>
-<li>No servers receiving your personal data</li>
+<li>No servers of ours receiving your personal data — ReviveX has no backend, and
+nothing you log is sent to us</li>
 <li>No third-party analytics, advertising, or tracking SDKs</li>
 <li>No sale or sharing of personal data (including under CCPA definitions)</li>
 </ul>
@@ -58,5 +78,6 @@ personal information from them.</p>
 features), this policy will be updated first and the app will ask for your
 consent before any data leaves your device.</p>
 <h2>Contact</h2>
-<p>Questions about this policy: contact the publisher through the app&#39;s App
-Store listing page.</p>
+<p>Questions about this policy: email <a href="mailto:monarchprimelabs@gmail.com">monarchprimelabs@gmail.com</a>.</p>
+<p>The current version of this policy is published at
+<a href="https://monarchprimelabs.github.io/apps/revivex/privacy.html">https://monarchprimelabs.github.io/apps/revivex/privacy.html</a>.</p>
