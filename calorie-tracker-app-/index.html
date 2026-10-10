@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FuelRing — Calorie & Macro Tracker</title>
+<meta name="description" content="A calorie and macro tracker with no account, no ads, and no subscription. Log food, scan barcodes, and track your progress — everything stays on your phone.">
+<style>
+  :root { --navy:#002850; --blue:#0078C8; --orange:#F07800; --ink:#16202B; --mut:#5B6B7C; --line:#E3E9EF; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+         color:var(--ink); background:#F4F7FA; }
+  header.hero { background:linear-gradient(160deg,var(--navy),#013b6e); color:#fff; padding:56px 20px 64px; text-align:center; }
+  header.hero h1 { font-size:34px; margin:0 0 10px; letter-spacing:-0.5px; }
+  header.hero h1 span { color:var(--orange); }
+  header.hero p { max-width:520px; margin:0 auto; color:#C9DAEA; font-size:17px; }
+  .price-badge { display:inline-block; margin-top:22px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25);
+    border-radius:999px; padding:8px 18px; font-size:14px; color:#fff; }
+  main { max-width:720px; margin:-28px auto 0; padding:0 20px 64px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:28px 24px; margin-bottom:20px; }
+  h2 { color:var(--navy); font-size:20px; margin:0 0 14px; }
+  ul.feat { list-style:none; padding:0; margin:0; display:grid; gap:12px; }
+  ul.feat li { padding-left:28px; position:relative; }
+  ul.feat li::before { content:"✓"; position:absolute; left:0; color:var(--blue); font-weight:700; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:480px) { .grid2 { grid-template-columns:1fr; } }
+  .foot-links { text-align:center; color:var(--mut); font-size:14px; padding:8px 0 40px; }
+  .foot-links a { color:var(--blue); text-decoration:none; margin:0 10px; }
+  a { color:var(--blue); }
+  @media (prefers-color-scheme: dark) {
+    body { background:#0E141B; color:#E8EDF2; }
+    .card { background:#151D26; border-color:#26313D; }
+    h2 { color:#7FB6E6; }
+  }
+</style>
+</head>
+<body>
+  <header class="hero">
+    <h1>Fuel<span>Ring</span></h1>
+    <p>Calorie &amp; macro tracking that respects you. No account, no ads, no subscription — your data never leaves your phone.</p>
+    <div class="price-badge">Free to download · Unlock everything once for $9.99</div>
+  </header>
+  <main>
+    <div class="card">
+      <h2>Everything you need, free</h2>
+      <ul class="feat">
+        <li>Nearly 1,400 foods built in, plus a full alcohol catalog — even liquor bottles scan correctly</li>
+        <li>Barcode scanner that opens straight to the camera</li>
+        <li>Log by the serving, gram, ounce, cup, or spoonful — and weigh in using pounds or kilograms</li>
+        <li>Your recent and frequent foods one tap away, plus quick add with macros</li>
+        <li>Calories, carbs, protein, and fat as color-coded rings</li>
+        <li>Fiber, sugar, sodium, saturated fat, and cholesterol on every food, with a weekly nutrition report</li>
+        <li>Exercise log, water tracking, weight check-ins, and body measurements</li>
+        <li>Complete your diary to see your weight in five weeks if every day were like today</li>
+        <li>Import your history from MyFitnessPal or Cronometer</li>
+        <li>Full Spanish translation and dark mode</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>FuelRing Pro — one payment, yours forever</h2>
+      <ul class="feat">
+        <li>Your real burn — your daily calorie burn measured from your own logs and weigh-ins</li>
+        <li>Daily coach insights</li>
+        <li>30 and 90-day trends with streak tracking</li>
+        <li>Goal forecasting from your real weigh-in trend</li>
+        <li>Calorie goals by day and an intermittent fasting timer</li>
+        <li>Recipes, unlimited saved meals, and Apple Health sync</li>
+        <li>Net carbs, macro goals in exact grams, and spreadsheet export</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Built around your privacy</h2>
+      <p style="margin:0">FuelRing has no servers. There's no account to create and nothing to sign in to,
+      because there's nowhere for your information to go. The only optional network request is looking up
+      an unrecognized barcode — and even that sends nothing but the barcode number.</p>
+    </div>
+  </main>
+  <div class="foot-links">
+    <a href="./privacy-policy.html">Privacy Policy</a>·
+    <a href="./support.html">Support</a>
+    <p style="margin-top:14px">© 2026 Monarch Prime Labs</p>
+  </div>
+</body>
+</html>
