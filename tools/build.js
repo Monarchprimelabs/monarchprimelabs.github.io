@@ -134,7 +134,7 @@ function privacyPage(a) {
 <p class="updated">Last reviewed: ${esc(a.privacy.lastUpdated || YEAR)}</p>
 <h2>At a glance</h2><ul>${points}</ul>
 ${a.privacy.notice ? `<div class="box">${esc(a.privacy.notice)}</div>` : ''}
-<h2>Contact</h2><p>Questions about privacy in ${esc(a.name)}: <a href="mailto:${esc(a.support.email)}">${esc(a.support.email)}</a></p>`;
+${(a.privacy.sections || []).map(s => `<h2>${esc(s.title)}</h2>\n<p>${esc(s.text)}</p>\n`).join('')}<h2>Contact</h2><p>Questions about privacy in ${esc(a.name)}: <a href="mailto:${esc(a.support.email)}">${esc(a.support.email)}</a></p>`;
   }
   const body = `<main><div class="wrap narrow">
   <p class="crumbs"><a href="${r}">Home</a> › <a href="./">${esc(a.name)}</a> › Privacy</p>

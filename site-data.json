@@ -175,6 +175,7 @@
         "hasPolicy": false,
         "lastUpdated": "2 September 2026",
         "summary": "A local-first app. Your records stay on your phone.",
+        "sections": [{ "title": "Apple Health", "text": "If you turn on Apple Health in Settings, Monarch Prime Pin reads your body weight, body fat percentage and step count to show them next to your records, on Home and in Reports. This data stays on your device, is never sent to us or anyone else, and is never used for advertising." }],
         "dataPoints": [
           "All research logs, schedules, inventory, templates, and settings are stored on your device. No server is involved.",
           "No analytics, crash reporting, advertising, or tracking SDKs. The app never sends push notifications.",
