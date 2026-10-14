@@ -89,12 +89,12 @@
       ],
       "privacy": {
         "hasPolicy": true,
-        "lastUpdated": "30 July 2026",
+        "lastUpdated": "14 October 2026",
         "dataPoints": [
           "No accounts, no analytics, no advertising SDKs, no tracking. FuelRing collects nothing.",
           "Your profile, diary, custom foods, saved meals, weigh-ins, water, and exercise are stored only on your phone. There is no server.",
           "One optional network request: looking up an unrecognized barcode in Open Food Facts. Only the barcode number is sent, and you can turn it off in Settings.",
-          "Apple Health access is read-only (steps, active energy, weight) and stays on your device. FuelRing never writes to Apple Health and never transmits Health data.",
+          "Apple Health access is read-only (workouts, sleep, steps, active energy, weight) and stays on your device. FuelRing never writes to Apple Health and never transmits Health data.",
           "FuelRing Pro is a one-time purchase handled entirely by Apple. We never see your payment details.",
           "Backups and CSV exports are created on your device and saved wherever you choose."
         ]
