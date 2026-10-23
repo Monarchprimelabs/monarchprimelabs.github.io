@@ -33,7 +33,7 @@
       "category": "Calorie & macro tracker",
       "tagline": "Calorie & macro tracking that respects you. No account, no ads, no subscription.",
       "summary": "FuelRing is a calorie and macro tracker that respects you: no account, no ads, no subscription, and no data collection. Everything you log stays on your phone. Download it free, log your food, and if you want the advanced features, unlock them once for a single price — forever.",
-      "status": "in_review",
+      "status": "live",
       "platforms": [
         "iPhone"
       ],
@@ -44,7 +44,10 @@
       "pricing": "Free to download. FuelRing Pro is a $9.99 one-time in-app purchase that unlocks everything forever — no subscription.",
       "pricingShort": "Free · $9.99 Pro, once",
       "publisher": "Monarch Prime Labs",
-      "appStore": null,
+      "appStore": {
+        "id": "6790025513",
+        "url": "https://apps.apple.com/app/id6790025513"
+      },
       "features": [
         {
           "title": "Nearly 1,400 foods built in",
