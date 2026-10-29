@@ -175,20 +175,25 @@
         }
       ],
       "privacy": {
-        "hasPolicy": false,
-        "lastUpdated": "2 September 2026",
+        "hasPolicy": true,
+        "lastUpdated": "29 October 2026",
         "summary": "A local-first app. Your records stay on your phone.",
-        "sections": [{ "title": "Apple Health", "text": "If you turn on Apple Health in Settings, Monarch Prime Pin reads your body weight, body fat percentage and step count to show them next to your records, on Home and in Reports. This data stays on your device, is never sent to us or anyone else, and is never used for advertising." }],
+        "sections": [
+          {
+            "title": "Apple Health",
+            "text": "If you turn on Apple Health in Settings, Monarch Prime Pin reads your body weight, body fat percentage and step count to show them next to your records, on Home and in Reports. This data stays on your device, is never sent to us or anyone else, and is never used for advertising."
+          }
+        ],
         "dataPoints": [
           "All research logs, schedules, inventory, templates, and settings are stored on your device. No server is involved.",
           "No analytics, crash reporting, advertising, or tracking SDKs. The app never sends push notifications.",
-          "The sign-in screen asks for a name and email, but no cloud service is configured in the shipped app: nothing is verified or uploaded, and the profile is kept only on your phone.",
-          "Camera and photo library are used only when you attach a progress photo to a record. Photos stay inside the app on your device.",
+          "The welcome screen asks only for a first name, which is optional and kept on your phone for the greeting. There is no account and no cloud service.",
+          "Camera and photo library are used only when you attach a progress photo or save a lab report. Photos and report files stay inside the app on your device.",
           "Notification permission is requested when you save a schedule entry with its Local reminder switch on. Reminders are scheduled on the device.",
           "Face ID or your device passcode is used only if you turn on the app lock; the app never handles biometric data itself.",
-          "Lifetime Pro is a one-time purchase processed by Apple. The app only receives a yes/no answer about whether it was bought.",
+          "Premium and the earlier Lifetime Pro are one-time purchases processed by Apple, not subscriptions. The app only learns from Apple whether they were bought.",
           "Data leaves the phone only when you share it yourself: a backup file, a CSV export, a report, or a progress card.",
-          "Deleting your account in Settings erases the local profile and all records from the phone. Uninstalling the app does the same."
+          "The delete option in Settings erases your records from the phone. Deleting the app removes everything it stored."
         ],
         "notice": "This page summarizes how the app handles data. A full privacy policy for Monarch Prime Pin is being finalized and will be published here."
       },
