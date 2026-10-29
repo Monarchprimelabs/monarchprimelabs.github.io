@@ -79,7 +79,7 @@
         },
         {
           "title": "Works with Apple Health",
-          "detail": "FuelRing reads steps, active energy, and weight from Apple Health, so any device that syncs there works: Apple Watch, Garmin, Oura, Whoop, Withings, and more. Automatic sync is part of FuelRing Pro; without Pro you can import an Apple Health export file from Settings. Active energy is shown as its own Move ring and is never added to your calorie budget behind your back."
+          "detail": "FuelRing reads workouts, sleep, steps, active energy, and weight from Apple Health, so any device that syncs there works: Apple Watch, Garmin, Oura, Whoop, Withings, and more. Automatic sync is part of FuelRing Pro; without Pro you can import an Apple Health export file from Settings. Synced workouts count toward your calories in full (the same workout saved by two apps counts once), and everyday movement counts only beyond what your activity level already includes, so a normal day isn't counted twice. Active energy also shows as its own Move ring, and you can turn off counting Health activity as exercise in Settings → Apple Health."
         },
         {
           "title": "FuelRing Pro — one payment, yours forever",
