@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="../../assets/icons/monarch-prime-pin.png">
 <link rel="stylesheet" href="../../assets/pin/pin.css">
 </head>
-<body>
+<body data-webapp="../../app/">
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="nav" id="nav">
@@ -57,7 +57,7 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 12.7c0-2.5 2-3.7 2.1-3.8-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.9-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.8 1.3 10.3.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.5 0 2 .8 3.3.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.8-1.1-2.8-4.2zM14.1 5.3c.7-.8 1.2-2 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.6 2.9-1.4z"/></svg>
           <span><small>Download on the</small>App Store</span>
         </a>
-        <span class="btn-soon glass">Android coming soon</span>
+        <a class="btn-soon glass" href="#get" data-webapp-link>Android? Use the web app</a>
       </div>
       <ul class="hero-points reveal">
         <li>Unlimited logging, free</li>
@@ -378,6 +378,50 @@
   </div>
 </section>
 
+<!-- GET IT: every phone -->
+<section class="get" id="get">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Get it on any phone</p>
+      <h2>iPhone, Android, or any browser.</h2>
+      <p class="sub">Download the app from the App Store, or add the web app to your Home Screen. It opens full screen with its own icon, like any other app.</p>
+    </div>
+    <div class="get-grid">
+      <article class="get-card glass reveal" data-platform="ios">
+        <span class="get-tag">iPhone and iPad</span>
+        <h3>Download from the App Store</h3>
+        <p>The full app, with Apple Health, Face ID and reliable reminders.</p>
+        <a class="btn-store" href="https://apps.apple.com/app/id6770808426"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 12.7c0-2.5 2-3.7 2.1-3.8-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.9-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.8 1.3 10.3.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.5 0 2 .8 3.3.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.8-1.1-2.8-4.2zM14.1 5.3c.7-.8 1.2-2 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.6 2.9-1.4z"/></svg><span><small>Download on the</small>App Store</span></a>
+        <details class="howto"><summary>Or add the web app to your Home Screen</summary>
+          <ol>
+            <li>Open the web app in <b>Safari</b>.</li>
+            <li>Tap the <b>Share</b> button <span class="kbd" aria-hidden="true">⬆</span>.</li>
+            <li>Scroll down and tap <b>Add to Home Screen</b>, then <b>Add</b>.</li>
+          </ol>
+        </details>
+      </article>
+      <article class="get-card glass reveal" data-platform="android">
+        <span class="get-tag">Android</span>
+        <h3>Use the web app</h3>
+        <p>The Google Play version is on its way. Until then, the web app runs right in Chrome.</p>
+        <a class="btn-web" href="../../app/" data-webapp-link>Open the web app</a>
+        <ol class="steps-inline">
+          <li>Open the web app in <b>Chrome</b>.</li>
+          <li>Tap the menu <span class="kbd" aria-hidden="true">⋮</span>, then <b>Install app</b> or <b>Add to Home screen</b>.</li>
+          <li>Open it from your Home Screen, full screen.</li>
+        </ol>
+      </article>
+      <article class="get-card glass reveal" data-platform="desktop">
+        <span class="get-tag">Computer</span>
+        <h3>Open it in any browser</h3>
+        <p>Review your history or labs on a bigger screen. Chrome and Edge can install it as an app too.</p>
+        <a class="btn-web ghost" href="../../app/" data-webapp-link>Open the web app</a>
+      </article>
+    </div>
+    <p class="fine center get-note reveal">The web app keeps your log in that browser on that device. Add it to your Home Screen so it stays put, and export a backup now and then. Apple Health and Face ID are only in the iPhone app.</p>
+  </div>
+</section>
+
 <!-- FINAL CTA -->
 <section class="final">
   <div class="wrap">
@@ -402,6 +446,13 @@
     <p class="fine">Monarch Prime Pin is a personal logbook, not a medical device, and doesn't provide medical advice. Apple, the Apple logo, iPhone and iPad are trademarks of Apple Inc. © 2026 Monarch Prime Labs.</p>
   </div>
 </footer>
+
+<div class="smart glass" id="smart" hidden role="region" aria-label="Get the app">
+  <img src="../../assets/pin/logo-symbol.png" alt="" width="40" height="40">
+  <div class="smart-copy"><b id="smartTitle">Monarch Prime Pin</b><small id="smartSub"></small></div>
+  <a class="smart-go" id="smartGo" href="#get">Get</a>
+  <button class="smart-x" id="smartX" type="button" aria-label="Dismiss">×</button>
+</div>
 
 <script src="../../assets/pin/pin.js" defer></script>
 </body>

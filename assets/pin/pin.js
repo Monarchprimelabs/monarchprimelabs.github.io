@@ -313,4 +313,40 @@
       toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 2400);
     });
   });
+
+  /* ---------- Platform: smart banner, web-app links, "this device" ---------- */
+  var ua = navigator.userAgent || '';
+  var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var isAndroid = /Android/i.test(ua);
+  var standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  var webapp = document.body.getAttribute('data-webapp') || '../../app/';
+  Array.prototype.forEach.call(document.querySelectorAll('[data-webapp-link]'), function (a) {
+    if (a.getAttribute('href') !== '#get') a.setAttribute('href', webapp);
+  });
+  var mine = isIOS ? 'ios' : isAndroid ? 'android' : 'desktop';
+  var card = document.querySelector('.get-card[data-platform="' + mine + '"]');
+  if (card) card.classList.add('mine');
+
+  var smart = document.getElementById('smart');
+  var dismissed = false;
+  try { dismissed = localStorage.getItem('mpp-smart-dismissed') === '1'; } catch (e) { /* storage blocked */ }
+  if (smart && !dismissed && !standalone && (isIOS || isAndroid)) {
+    var go = document.getElementById('smartGo');
+    if (isIOS) {
+      document.getElementById('smartSub').textContent = 'Free on the App Store';
+      go.textContent = 'Get';
+      go.setAttribute('href', 'https://apps.apple.com/app/id6770808426');
+    } else {
+      document.getElementById('smartSub').textContent = 'Use it on Android in your browser';
+      go.textContent = 'Open';
+      go.setAttribute('href', webapp);
+    }
+    smart.hidden = false;
+    setTimeout(function () { smart.classList.add('show'); }, 1800);
+    document.getElementById('smartX').addEventListener('click', function () {
+      smart.classList.remove('show');
+      setTimeout(function () { smart.hidden = true; }, 600);
+      try { localStorage.setItem('mpp-smart-dismissed', '1'); } catch (e) { /* storage blocked */ }
+    });
+  }
 })();
