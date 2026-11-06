@@ -1,12 +1,16 @@
 // FuelRing web app: works offline after the first visit.
 // build.js fills in the version (a hash of the files) and the file list, so
 // every release gets a new cache and the old one is dropped.
-const VERSION = '5e6c5c66d5af';
+const VERSION = '0a09206a816a';
 const CACHE = 'fuelring-' + VERSION;
 const FILES = ["./","./index.html","./manifest.webmanifest","./icons/apple-touch-icon.png","./icons/favicon-32.png","./icons/icon-192.png","./icons/icon-512.png"];
 
+// cache: 'reload' skips the browser's HTTP cache (GitHub Pages lets it keep a
+// page for 10 minutes), so a new version never stores the previous index.html
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES)).then(() => self.skipWaiting()));
+  event.waitUntil(caches.open(CACHE)
+    .then(cache => cache.addAll(FILES.map(f => new Request(f, { cache: 'reload' }))))
+    .then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', event => {

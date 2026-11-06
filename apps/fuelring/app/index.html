@@ -1709,14 +1709,19 @@ const Core = (() => {
   function widgetSnapshot(state, date) {
     if (!state.profile || !state.goals) return null;
     const t = dayTotals(state, date), g = goalsForDate(state, date), r = Math.round;
-    const goals = {};
-    for (let i = 0; i < 8; i++) { const d = addDaysISO(date, i); goals[d] = r(goalsForDate(state, d).calories); }
+    // the next 8 days' goals (calories, and carbs/protein/fat in `macros`), so a
+    // widget not refreshed since midnight shows the new day's goals, nothing eaten
+    const goals = {}, macros = {};
+    for (let i = 0; i < 8; i++) {
+      const d = addDaysISO(date, i), gd = goalsForDate(state, d);
+      goals[d] = r(gd.calories); macros[d] = [r(gd.carbs), r(gd.protein), r(gd.fat)];
+    }
     return {
       v: 1, date, lang: state.lang === 'es' ? 'es' : 'en',
       goal: r(t.goal), food: r(t.food.cal), exercise: r(t.exercise), left: r(t.remaining),
       carbs: r(state.netCarbs ? netCarbs(t.food) : t.food.c), netCarbs: !!state.netCarbs, carbsGoal: r(g.carbs),
       protein: r(t.food.p), proteinGoal: r(g.protein), fat: r(t.food.f), fatGoal: r(g.fat),
-      goals,
+      goals, macros,
     };
   }
 
@@ -4872,10 +4877,15 @@ const App = (() => {
   // navigate the whole app to the raw file, with no way back. There the wrapper
   // takes the text, writes the file and opens the share sheet (Save to Files,
   // AirDrop, Mail…). The double-clicked file downloads as it always has.
-  function saveFile(name, mime, text) {
+  // Hands a file over: the iPhone app's share sheet, a phone browser's share
+  // sheet, or a download. done() runs once it has been handed over, which for a
+  // browser's share sheet means not cancelled (a dismissed sheet saved nothing,
+  // so it must not count as a backup). False: this browser can't save files.
+  function saveFile(name, mime, text, done) {
+    const handed = () => { if (done) done(); return true; };
     if (window.ReactNativeWebView) {
       window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'saveFile', name, text }));
-      return true;
+      return handed();
     }
     // the web app on a phone: the share sheet (Save to Files, AirDrop, Drive,
     // Mail) where the browser can share that kind of file; a download otherwise
@@ -4883,12 +4893,14 @@ const App = (() => {
       try {
         const f = new File([text], name, { type: mime });
         if (navigator.canShare({ files: [f] })) {
-          navigator.share({ files: [f] }).catch(err => { if (!err || err.name !== 'AbortError') download(name, mime, text); });
+          navigator.share({ files: [f] }).then(handed, err => {
+            if ((!err || err.name !== 'AbortError') && download(name, mime, text)) handed();
+          });
           return true;
         }
       } catch (e) { /* fall back to a download */ }
     }
-    return download(name, mime, text);
+    return download(name, mime, text) ? handed() : false;
   }
   function download(name, mime, text) {
     if (typeof URL.createObjectURL !== 'function') return false;
@@ -5028,8 +5040,10 @@ const App = (() => {
   // Install button. iPhone Safari has none — there it's Share → Add to Home Screen.
   let installPrompt = null;
   if (WEB) {
-    window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installPrompt = e; if (state.profile) render(); });
-    window.addEventListener('appinstalled', () => { installPrompt = null; render(); });
+    // redraw for the Install button, but never over the first screen's form or an
+    // open sheet (typed values aren't in state); the next redraw catches up
+    window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installPrompt = e; if (state.profile && !ui.modal) render(); });
+    window.addEventListener('appinstalled', () => { installPrompt = null; if (state.profile && !ui.modal) render(); });
   }
   function installNow() {
     if (!installPrompt) return;
@@ -5161,7 +5175,16 @@ const App = (() => {
   const toWrapper = msg => { if (window.ReactNativeWebView) window.ReactNativeWebView.postMessage(JSON.stringify(msg)); };
   const sent = { widget: '', reminders: '', chrome: '' };
   function syncNative() {
-    if (!window.ReactNativeWebView || !state.profile) return;
+    if (!window.ReactNativeWebView) return;
+    const c = ACCENT_CHROME[state.accent] || ACCENT_CHROME.classic;
+    if (c !== sent.chrome) { sent.chrome = c; toWrapper({ type: 'chrome', color: c }); }
+    if (!state.profile) {
+      // no diary (a first launch, or Erase all data): cancel every reminder and
+      // empty the widget, so nothing pings or shows numbers for a diary that's gone
+      if (sent.widget !== 'null') { sent.widget = 'null'; toWrapper({ type: 'widget', data: null }); }
+      if (sent.reminders !== '[]') { sent.reminders = '[]'; toWrapper({ type: 'reminders', items: [] }); }
+      return;
+    }
     const today = Core.todayISO(), now = new Date();
     // widget (Pro): today's numbers; free users get a locked card that says what Pro adds
     const snap = isPro() ? Core.widgetSnapshot(state, today) : { v: 1, locked: true, lang: state.lang === 'es' ? 'es' : 'en' };
@@ -5174,8 +5197,6 @@ const App = (() => {
     }));
     const r = JSON.stringify(items);
     if (r !== sent.reminders) { sent.reminders = r; toWrapper({ type: 'reminders', items }); }
-    const c = ACCENT_CHROME[state.accent] || ACCENT_CHROME.classic;
-    if (c !== sent.chrome) { sent.chrome = c; toWrapper({ type: 'chrome', color: c }); }
   }
   // iOS's answer to the notification permission (the wrapper asks the first
   // time a reminder is turned on). Off: Settings says how to turn it back on.
@@ -5320,18 +5341,36 @@ const App = (() => {
       const rem = $('#remaining');
       return { tab: ui.tab, date: ui.date, rings, remaining: rem && fresh(rem.dataset.fxAt, 650) ? +rem.dataset.fxFrom : num(rem) };
     }
-    // a pill slides from where it was to where it is now (start there, then let it go)
+    // a pill slides from where it was to where it is now: start it there with no
+    // transition, then let it go. Every render draws fresh pills, and a fresh one
+    // would otherwise grow in from the left edge, so a pill with nowhere new to go
+    // (or a first one) starts right where it belongs and nothing moves
     function slide(el, key, x, w, i, reduce) {
-      const was = pills[key];
-      if (was && (was.x !== x || was.w !== w) && !reduce) {
-        el.style.transition = 'none';
-        el.style.transform = `translateX(${was.x}px)`; el.style.width = `${was.w}px`;
-        void el.offsetWidth;
-        el.style.transition = '';
-      }
+      const was = pills[key], from = was && !reduce ? was : { x, w };
+      el.style.transition = 'none';
+      el.style.transform = `translateX(${from.x}px)`; el.style.width = `${from.w}px`;
+      void el.offsetWidth;
+      el.style.transition = '';
       el.style.transform = `translateX(${x}px)`; el.style.width = `${w}px`;
       pills[key] = { x, w, i };
       return !!was && was.i !== i;
+    }
+    // the lit pills: the tab bar's, and every switch's (Week / 30 / 90, Recent /
+    // Frequent, % / grams …). Also called after a partial redraw of a switch.
+    function placePills(reduce) {
+      const nav = document.querySelector('nav'), pill = nav && nav.querySelector('.tabpill'), on = nav && nav.querySelector('button.on');
+      if (pill && on) { slide(pill, 'tab', on.offsetLeft + 5, on.offsetWidth - 10, on.dataset.tab, reduce); nav.classList.add('pilled'); }
+      let switched = false;
+      document.querySelectorAll('.seg').forEach((seg, n) => {
+        const btns = [...seg.querySelectorAll('button')], i = btns.findIndex(x => x.classList.contains('on'));
+        if (i < 0) return;
+        let p = seg.querySelector('.segpill');
+        if (!p) { p = document.createElement('i'); p.className = 'segpill'; p.setAttribute('aria-hidden', 'true'); seg.prepend(p); }
+        const key = (seg.id || 'seg' + n) + '|' + (state.profile ? ui.tab + '|' + (ui.modal || '') : 'onb') + '|' + btns.length;
+        switched = slide(p, key, btns[i].offsetLeft, btns[i].offsetWidth, i, reduce) || switched;
+        seg.classList.add('pilled');
+      });
+      if (switched) haptic('selection');
     }
     function after(b) {
       const reduce = reduceMotion();
@@ -5344,21 +5383,7 @@ const App = (() => {
         const rem = $('#remaining'), to = num(rem);
         if (rem && b.remaining != null && to != null && to !== b.remaining) countTo(rem, b.remaining, to);
       }
-      // the tab pill
-      const nav = document.querySelector('nav'), pill = nav && nav.querySelector('.tabpill'), on = nav && nav.querySelector('button.on');
-      if (pill && on) { slide(pill, 'tab', on.offsetLeft + 5, on.offsetWidth - 10, on.dataset.tab, reduce); nav.classList.add('pilled'); }
-      // every switch (Week / 30 / 90, Recent / Frequent, % / grams …)
-      let switched = false;
-      document.querySelectorAll('.seg').forEach((seg, n) => {
-        const btns = [...seg.querySelectorAll('button')], i = btns.findIndex(x => x.classList.contains('on'));
-        if (i < 0) return;
-        let p = seg.querySelector('.segpill');
-        if (!p) { p = document.createElement('i'); p.className = 'segpill'; p.setAttribute('aria-hidden', 'true'); seg.prepend(p); }
-        const key = (seg.id || 'seg' + n) + '|' + (state.profile ? ui.tab + '|' + (ui.modal || '') : 'onb') + '|' + btns.length;
-        switched = slide(p, key, btns[i].offsetLeft, btns[i].offsetWidth, i, reduce) || switched;
-        seg.classList.add('pilled');
-      });
-      if (switched) haptic('selection');
+      placePills(reduce);
       // logging: a light tap; the water goal: sparks and a success tap
       if (!state.profile) { day = null; return; }
       const t = Core.dayTotals(state, ui.date), cups = Core.waterFor(state, ui.date), goal = state.waterGoal || 8;
@@ -5375,7 +5400,7 @@ const App = (() => {
       }
       day = now;
     }
-    return { capture, after };
+    return { capture, after, pills: () => placePills(reduceMotion()) };
   })();
   let lastTab = null, lastModal = null; // web: cards rise in when a tab opens and sheets when they open, not on every re-render
   function render() {
@@ -5383,7 +5408,7 @@ const App = (() => {
     applyTheme();
     applyLang();
     const app = $('#app');
-    if (!state.profile) { app.innerHTML = onboardingHTML(); bindOnboarding(); lastTab = null; if (GLASS) motion.after(null); return; }
+    if (!state.profile) { app.innerHTML = onboardingHTML(); bindOnboarding(); syncNative(); lastTab = null; if (GLASS) motion.after(null); return; }
     const before = GLASS ? motion.capture() : null;
     if (GLASS) {
       app.classList.toggle('enter', ui.tab !== lastTab); lastTab = ui.tab;
@@ -7372,6 +7397,7 @@ const App = (() => {
       $('#mealResults').innerHTML = mealRowsHTML(Core.searchSavedMeals(state, ui.query));
       $('#results').innerHTML = searchListHTML();
       bindPicks(); bindMealPicks(); bindListMode();
+      if (GLASS) motion.pills(); // the switch comes back when the box is cleared
     });
     bindPicks(); bindMealPicks(); bindListMode();
     function bindListMode() {
@@ -7380,6 +7406,7 @@ const App = (() => {
         $('#listSeg').innerHTML = listSegHTML();
         $('#results').innerHTML = searchListHTML();
         bindPicks(); bindListMode();
+        if (GLASS) motion.pills(); // redrawn in place (the search box keeps focus), so slide its pill here
       }));
     }
     function bindMealPicks() {
@@ -7671,8 +7698,9 @@ const App = (() => {
     });
     $('#st-export')?.addEventListener('click', () => {
       const stamped = Core.markExported(state, Core.todayISO()); // stamp travels inside the export too
-      if (!saveFile('fuelring-export.json', 'application/json', Core.serialize(stamped))) return toast(tr('Not supported in this browser'));
-      state = stamped; save(); toast(tr('Exported'));
+      // the stamp sticks (and the backup nudge rests) only once the file is handed over
+      const saved = () => { state = Core.markExported(state, Core.todayISO()); save(); toast(tr('Exported')); };
+      if (!saveFile('fuelring-export.json', 'application/json', Core.serialize(stamped), saved)) toast(tr('Not supported in this browser'));
     });
     const postToWrapper = msg => window.ReactNativeWebView && window.ReactNativeWebView.postMessage(JSON.stringify(msg));
     $('#proOpen')?.addEventListener('click', openPro);
@@ -7741,8 +7769,9 @@ const App = (() => {
     $('#st-csv')?.addEventListener('click', () => {
       if (!isPro()) return openPro();
       // BOM so Excel reads it as UTF-8 (otherwise "Plátano" arrives mangled)
-      if (!saveFile('fuelring-diary.csv', 'text/csv;charset=utf-8', '\ufeff' + Core.diaryCSV(state))) return toast(tr('Not supported in this browser'));
-      toast(tr('Diary exported as CSV'));
+      if (!saveFile('fuelring-diary.csv', 'text/csv;charset=utf-8', '\ufeff' + Core.diaryCSV(state), () => toast(tr('Diary exported as CSV')))) {
+        toast(tr('Not supported in this browser'));
+      }
     });
     $('#st-online')?.addEventListener('change', e => {
       set(Core.setOnlineLookup(state, e.target.checked));
