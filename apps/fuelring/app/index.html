@@ -299,10 +299,15 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   .glass{--field:rgba(255,255,255,.8)}
   :root[data-theme="dark"].glass{--field:rgba(9,22,38,.62)}
   .glass .aurora{display:block;position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+  /* glass themes (Pro color themes): the lights behind the glass and a tint in it follow the theme */
+  :root{--au1:rgba(0,120,200,.7);--au2:rgba(240,120,0,.55);--au3:rgba(124,77,190,.48);--gtint:rgba(0,0,0,0)}
+  :root[data-accent="midnight"]{--au1:rgba(38,92,230,.72);--au2:rgba(0,188,222,.5);--au3:rgba(98,64,214,.52);--gtint:rgba(58,110,230,.07)}
+  :root[data-accent="forest"]{--au1:rgba(18,150,96,.66);--au2:rgba(150,198,52,.48);--au3:rgba(0,128,140,.48);--gtint:rgba(30,150,100,.07)}
+  :root[data-accent="berry"]{--au1:rgba(206,40,124,.62);--au2:rgba(244,112,152,.52);--au3:rgba(132,50,196,.52);--gtint:rgba(206,52,140,.07)}
   .glass .aurora i{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;will-change:transform}
-  .glass .aurora i:nth-child(1){width:520px;height:520px;background:radial-gradient(circle,rgba(0,120,200,.7),transparent 65%);top:-190px;left:-170px;animation:au1 19s ease-in-out infinite}
-  .glass .aurora i:nth-child(2){width:460px;height:460px;background:radial-gradient(circle,rgba(240,120,0,.55),transparent 65%);top:22%;right:-210px;animation:au2 23s ease-in-out infinite}
-  .glass .aurora i:nth-child(3){width:440px;height:440px;background:radial-gradient(circle,rgba(124,77,190,.48),transparent 65%);bottom:-200px;left:18%;animation:au3 27s ease-in-out infinite}
+  .glass .aurora i:nth-child(1){width:520px;height:520px;background:radial-gradient(circle,var(--au1),transparent 65%);top:-190px;left:-170px;animation:au1 19s ease-in-out infinite}
+  .glass .aurora i:nth-child(2){width:460px;height:460px;background:radial-gradient(circle,var(--au2),transparent 65%);top:22%;right:-210px;animation:au2 23s ease-in-out infinite}
+  .glass .aurora i:nth-child(3){width:440px;height:440px;background:radial-gradient(circle,var(--au3),transparent 65%);bottom:-200px;left:18%;animation:au3 27s ease-in-out infinite}
   :root[data-theme="dark"] .aurora i{opacity:.62}
   @keyframes au1{50%{transform:translate(110px,90px) scale(1.15)}}
   @keyframes au2{50%{transform:translate(-90px,110px) scale(1.1)}}
@@ -335,11 +340,11 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
 
   /* cards: frosted panes with a sheen across the top edge */
   .glass .card{position:relative;isolation:isolate;border-radius:20px;
-    background:linear-gradient(150deg,rgba(255,255,255,.88),rgba(255,255,255,.68));border:1px solid rgba(255,255,255,.82);
+    background:linear-gradient(var(--gtint),var(--gtint)),linear-gradient(150deg,rgba(255,255,255,.88),rgba(255,255,255,.68));border:1px solid rgba(255,255,255,.82);
     box-shadow:0 10px 30px rgba(16,42,80,.08),inset 0 1px 0 rgba(255,255,255,.95)}
   .glass .card::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
     background:radial-gradient(120% 70% at 15% 0%,rgba(255,255,255,.6),transparent 60%)}
-  :root[data-theme="dark"].glass .card{background:linear-gradient(150deg,rgba(34,58,90,.64),rgba(14,30,50,.52));border-color:rgba(255,255,255,.1);
+  :root[data-theme="dark"].glass .card{background:linear-gradient(var(--gtint),var(--gtint)),linear-gradient(150deg,rgba(34,58,90,.64),rgba(14,30,50,.52));border-color:rgba(255,255,255,.1);
     box-shadow:0 14px 34px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.09)}
   :root[data-theme="dark"].glass .card::before{background:radial-gradient(120% 70% at 15% 0%,rgba(255,255,255,.08),transparent 60%)}
 
@@ -381,7 +386,32 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
     background:linear-gradient(150deg,rgba(255,255,255,.88),rgba(255,255,255,.66));border:1px solid rgba(255,255,255,.82);box-shadow:0 10px 30px rgba(16,42,80,.08)}
   :root[data-theme="dark"].glass #onbForm{background:linear-gradient(150deg,rgba(34,58,90,.64),rgba(14,30,50,.52));border-color:rgba(255,255,255,.1)}
   .glass .btn,.glass .qa-tile,.glass .fresult,.glass .swatch,.glass .seg button,.glass nav button{transition:transform .32s cubic-bezier(.3,1.6,.5,1),background .2s,box-shadow .2s}
-  .glass .btn:active,.glass .qa-tile:active,.glass .fresult:active,.glass .swatch:active,.glass .seg button:active,.glass nav button:active{transform:scale(.96)}
+  .glass .btn:active,.glass .qa-tile:active,.glass .fresult:active,.glass .swatch:active,.glass .seg button:active,.glass nav button:active{transform:scale(.96);transition-duration:.08s}
+  .glass .entry.tapme,.glass .addrow,.glass .wbd{transition:transform .32s cubic-bezier(.3,1.6,.5,1),background .2s}
+  .glass .entry.tapme:active,.glass .addrow:active,.glass .wbd:active{transform:scale(.98);transition-duration:.08s}
+  /* a log lands: its toast pops, with a check that draws itself */
+  .glass .toast.done{padding-left:46px}
+  .glass .toast.done::before{content:"";position:absolute;left:12px;top:50%;width:24px;height:24px;margin-top:-12px;border-radius:50%;
+    background:#1B9E4B;box-shadow:0 0 0 4px rgba(27,158,75,.25);animation:popIn .45s cubic-bezier(.3,1.6,.5,1) both}
+  .glass .toast.done::after{content:"";position:absolute;left:21px;top:50%;width:6px;height:11px;margin-top:-8px;border:solid #fff;
+    border-width:0 2.5px 2.5px 0;transform:rotate(45deg) scale(0);animation:checkIn .3s cubic-bezier(.3,1.6,.5,1) .18s forwards}
+  .glass .toast.done.show{animation:toastPop .45s cubic-bezier(.3,1.5,.5,1)}
+  @keyframes checkIn{to{transform:rotate(45deg) scale(1)}}
+  @keyframes toastPop{from{transform:translateX(-50%) scale(.82)}to{transform:translateX(-50%) scale(1)}}
+  /* the next or previous day slides in from its side (a swipe, or ‹ ›) */
+  @keyframes dayInR{from{transform:translateX(28px);opacity:0}}
+  @keyframes dayInL{from{transform:translateX(-28px);opacity:0}}
+  .glass #app.day-next main>*{animation:dayInR .32s cubic-bezier(.2,.8,.2,1) both}
+  .glass #app.day-prev main>*{animation:dayInL .32s cubic-bezier(.2,.8,.2,1) both}
+  /* sheets have a grabber, follow the finger down and spring back */
+  .glass .sheet{transition:transform .3s cubic-bezier(.2,.9,.25,1.04)}
+  .glass .sheet-h{position:relative}
+  .glass .sheet-h::before{content:"";position:absolute;top:6px;left:50%;width:36px;height:5px;margin-left:-18px;border-radius:3px;background:rgba(120,135,160,.38)}
+  /* nothing logged yet today: a soft ring breathes out of the + */
+  .glass .navplus.invite span::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:2px solid rgba(240,120,0,.6);animation:invite 2.6s ease-out infinite}
+  @keyframes invite{from{transform:scale(1);opacity:.9}to{transform:scale(1.5);opacity:0}}
+  .recapimg{display:block;width:100%;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .ideashead{margin:8px 2px 4px}
 
   /* inside the iPhone app the strip behind the clock is native and solid navy:
      the header (and the compact bar) start in exactly that color, no seam */
@@ -452,6 +482,9 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
     .donecheck circle,.donecheck path{animation:none;stroke-dashoffset:0}
     .burst{display:none}
     .glass .minibar,.glass nav .tabpill,.glass .seg .segpill{transition:none}
+    .glass #app.day-next main>*,.glass #app.day-prev main>*,.glass .toast.done.show,.glass .toast.done::before,.glass .navplus.invite span::after{animation:none}
+    .glass .navplus.invite span::after{display:none}
+    .glass .toast.done::after{animation:none;transform:rotate(45deg) scale(1)}
   }
   @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 </style>
@@ -576,7 +609,7 @@ const Core = (() => {
   // fiber per IOM (38/25 g under 51, 30/21 g at 51+), sugar per AHA added-sugar
   // caps (36/25 g), sodium 2300 mg (AHA-ideal 1500 mg at 51+), saturated fat
   // <10% of calories, cholesterol 300 mg.
-  function microTargets(profile, calories) {
+  function standardMicroTargets(profile, calories) {
     const male = profile.sex === 'male', over50 = profile.age > 50;
     return {
       fib: male ? (over50 ? 30 : 38) : (over50 ? 21 : 25),
@@ -585,6 +618,33 @@ const Core = (() => {
       sat: Math.round((calories * 0.10) / 9),
       chol: 300,
     };
+  }
+  // Custom nutrient targets (Pro to set; once set they keep applying, like gram
+  // goals): profile.microGoals holds any of the five, each replacing the
+  // standard one. Every reader goes through microTargets, so the Nutrition
+  // section, the weekly report and the coach all follow.
+  const MICRO_GOAL_RANGES = { fib: [5, 100], sug: [5, 300], sod: [500, 6000], sat: [5, 100], chol: [50, 1000] };
+  function cleanMicroGoals(goals) {
+    if (!goals || typeof goals !== 'object' || Array.isArray(goals)) return null;
+    const out = {};
+    for (const [k, [lo, hi]] of Object.entries(MICRO_GOAL_RANGES)) {
+      const v = Math.round(+goals[k]);
+      if (goals[k] != null && goals[k] !== '' && Number.isFinite(v) && v >= lo && v <= hi) out[k] = v;
+    }
+    return Object.keys(out).length ? out : null;
+  }
+  function microTargets(profile, calories) {
+    const t = standardMicroTargets(profile, calories);
+    const own = cleanMicroGoals(profile.microGoals);
+    return own ? { ...t, ...own } : t;
+  }
+  // null (or nothing valid) goes back to the standard targets
+  function setMicroGoals(state, goals) {
+    const s = clone(state);
+    if (!s.profile) return s;
+    const own = cleanMicroGoals(goals);
+    if (own) s.profile.microGoals = own; else delete s.profile.microGoals;
+    return s;
   }
 
   // ----- state -----
@@ -2051,6 +2111,24 @@ const Core = (() => {
       pct: split(avg.c, avg.p, avg.f), goalPct: split(target.c, target.p, target.f) };
   }
 
+  // The week in one shareable card (Pro): the 7 days ending on `date`. Averages
+  // count logged days only (like the weekly report); a day is "within budget"
+  // when its Remaining didn't go below zero (food ≤ goal + exercise); the
+  // streak is the logging streak shown on Progress.
+  function weekRecap(state, date) {
+    const wk = weeklyNutrition(state, date);
+    if (!wk) return null;
+    const within = wk.days.filter(d => d.logged && dayTotals(state, d.date).remaining >= 0).length;
+    return {
+      start: wk.days[0].date, end: date, daysLogged: wk.daysLogged, within,
+      avgCal: wk.avg.cal, goalCal: wk.target.cal,
+      avgProtein: Math.round(wk.avg.p), goalProtein: wk.target.p,
+      streak: trendStats(state, date, 90).streak,
+      weightChange: trendStats(state, date, 7).weightChange, // lb; null with fewer than 2 weigh-ins
+      days: wk.days.map(d => ({ date: d.date, cal: d.cal, goal: d.target.cal, logged: d.logged })),
+    };
+  }
+
   // long-range stats for the last `days` days ending endDate (inclusive)
   function trendStats(state, endDate, days) {
     const series = [];
@@ -2827,6 +2905,50 @@ const Core = (() => {
       .map(id => ({ ...byId.get(id), timesLogged: counts[id] }));
   }
 
+  // ----- meal ideas (Pro) -----
+  // What fits the rest of the day: the person's saved meals and the foods they
+  // log most, then staples from the food list, every one within the calories
+  // left. With 15 g or more of protein still to go, protein-dense picks lead;
+  // otherwise the ones that use about half of what's left. Nothing with
+  // alcohol, nothing under 60 kcal (condiments, drinks). Deterministic: ties
+  // keep their order, so the list doesn't shuffle between visits.
+  function mealIdeas(state, db, date, limit = 8) {
+    if (!state.profile || !state.goals) return null;
+    const t = dayTotals(state, date), g = goalsForDate(state, date);
+    const left = Math.round(t.remaining), proteinGap = Math.max(0, Math.round(g.protein - t.food.p));
+    if (left < 60) return { left, proteinGap, items: [] };
+    const score = (cal, p) => {
+      if (proteinGap >= 15) return Math.min(p, proteinGap) / proteinGap * 2 + Math.min(1, p * 4 / cal);
+      const aim = left / 2;
+      return 1 - Math.min(1, Math.abs(cal - aim) / aim);
+    };
+    const fits = (cal, alc) => cal >= 60 && cal <= left && !alc;
+    const byId = new Map([...state.customFoods, ...db].map(f => [f.id, f]));
+    const items = [], seen = new Set();
+    const add = (item, bonus) => {
+      const key = item.name.toLowerCase();
+      if (seen.has(key)) return;
+      seen.add(key);
+      items.push({ ...item, score: score(item.cal, item.p) + bonus, order: items.length });
+    };
+    for (const m of state.savedMeals) {
+      const n = m.servings || 1, sum = k => m.items.reduce((a, e) => a + (+e[k] || 0), 0) / n;
+      const cal = Math.round(sum('cal')), p = round1(sum('p'));
+      const drinks = m.items.some(e => { const src = e.foodId && byId.get(e.foodId); return !!(src && src.alc); });
+      if (fits(cal, drinks)) add({ kind: 'meal', id: m.id, name: m.name, cal, p, own: true }, 0.6);
+    }
+    for (const f of frequentFoods(state, db, 30)) {
+      if (fits(f.cal, f.alc)) add({ kind: 'food', id: f.id, name: f.name, cal: f.cal, p: f.p, own: true }, 0.4);
+    }
+    for (const f of db) {
+      if (fits(f.cal, f.alc) && (proteinGap < 15 || f.p * 4 / f.cal >= 0.25)) {
+        add({ kind: 'food', id: f.id, name: f.name, cal: f.cal, p: f.p, own: false }, 0);
+      }
+    }
+    items.sort((a, b) => b.score - a.score || a.order - b.order);
+    return { left, proteinGap, items: items.slice(0, limit).map(({ score: _s, order: _o, ...it }) => ({ ...it, food: it.kind === 'food' ? byId.get(it.id) : undefined })) };
+  }
+
   // ----- quick add -----
   // Calories plus optional macros. With macros but no calories, calories come
   // from the macros (Atwater 4/4/9) — that's how people quick-add off a label.
@@ -2981,6 +3103,10 @@ const Core = (() => {
     s.reminders = cleanReminders(s.reminders); // pref added in 1.0.2; all off until turned on
     if (typeof s.pro !== 'boolean') s.pro = false;
     if (typeof s.tourDone !== 'boolean') s.tourDone = true; // existing users skip the tour
+    if (s.profile) { // custom nutrient targets (1.0.2, Pro), only the valid ones
+      const own = cleanMicroGoals(s.profile.microGoals);
+      if (own) s.profile.microGoals = own; else delete s.profile.microGoals;
+    }
     return s;
   }
 
@@ -2995,8 +3121,8 @@ const Core = (() => {
   }
 
   return {
-    bmr, tdee, calorieGoal, macroGoals, validMacroSplit, validMacroGrams, macroGramsCal, goalsFor, microTargets, newState, completeOnboarding,
-    frequentFoods, quickAddFood, weightProjection, fastPlans, startFast, endFast, fastStatus, fastStats,
+    bmr, tdee, calorieGoal, macroGoals, validMacroSplit, validMacroGrams, macroGramsCal, goalsFor, microTargets, standardMicroTargets, setMicroGoals, MICRO_GOAL_RANGES, newState, completeOnboarding,
+    frequentFoods, mealIdeas, quickAddFood, weightProjection, fastPlans, startFast, endFast, fastStatus, fastStats,
     day, logFood, removeEntry, setEntryServings, logExercise, removeExercise, updateExercise,
     copyMeal, saveMeal, logSavedMeal, removeSavedMeal, savedMealCal, searchSavedMeals,
     addWater, waterFor, setWaterGoal, updateCustomFood, removeCustomFood, renameSavedMeal, trendStats,
@@ -3006,7 +3132,7 @@ const Core = (() => {
     setUnits, defaultUnits, unitLabels, toDisplayWeight, fromDisplayWeight, toDisplayLength, fromDisplayLength,
     heightParts, proteinPerBodyweight,
     bodyMetrics, logMeasurement, removeMeasurement, measurementSeries, latestMeasurement, measurementStats,
-    mealTotals, dayTotals, healthExercise, activityIncluded, setHealthExercise, reviewActivity, workoutName, sleepWeek, sleepRange, collapseSources, weeklyStats, weeklyNutrition, validDayShift, dayShiftPlan, goalsForDate, latestSteps, latestBurn, streakBadge, addCustomFood, searchFoods, checkInWeight,
+    mealTotals, dayTotals, healthExercise, activityIncluded, setHealthExercise, reviewActivity, workoutName, sleepWeek, sleepRange, collapseSources, weeklyStats, weeklyNutrition, weekRecap, validDayShift, dayShiftPlan, goalsForDate, latestSteps, latestBurn, streakBadge, addCustomFood, searchFoods, checkInWeight,
     trendWeight, adaptiveTDEE, setTdeeOverride, weekBudget,
     setTourDone,
     normalizeBarcode, lookupBarcode, expandUPCE, offProductToFood, alcoholFromOFF, setOnlineLookup,
@@ -4854,6 +4980,17 @@ const App = (() => {
     'Home Screen & Lock Screen widgets': 'Widgets en inicio y pantalla bloqueada',
     'calories left and macros at a glance': 'calorías restantes y macros de un vistazo',
     'Color themes & app icons': 'Temas de color e íconos', 'make FuelRing yours': 'haz FuelRing a tu manera',
+    'themes that tint the glass, plus app icons': 'temas que tiñen el vidrio, más íconos de la app',
+    'Meal ideas that fit': 'Ideas de comida que caben', "foods and meals that fit what's left today": 'alimentos y comidas que caben en lo que te queda hoy',
+    'Weekly recap card': 'Resumen semanal para compartir', 'a picture of your week to share': 'una imagen de tu semana para compartir',
+    'Custom nutrient targets': 'Metas de nutrientes a tu medida', 'your own fiber, sugar, sodium, sat fat & cholesterol': 'tu propia fibra, azúcar, sodio, grasa saturada y colesterol',
+    'Ideas': 'Ideas', 'protein': 'proteína', "You're at today's goal — nothing left to fit.": 'Ya llegaste a tu meta de hoy — no queda espacio.',
+    "Nothing fits what's left yet.": 'Todavía nada cabe en lo que te queda.',
+    'Nutrient targets': 'Metas de nutrientes', 'Save targets': 'Guardar metas', 'Use the standard targets': 'Usar las metas estándar',
+    'Nutrient targets saved': 'Metas de nutrientes guardadas', 'Back to the standard targets': 'De vuelta a las metas estándar',
+    'Saved — a value out of range was left at the standard target': 'Guardado — un valor fuera de rango se quedó en la meta estándar',
+    'your target': 'tu meta', 'Share my week': 'Compartir mi semana', 'My week': 'Mi semana', 'Share': 'Compartir',
+    "A picture of your week. Only what's on it leaves your phone, and only where you send it.": 'Una imagen de tu semana. Solo sale de tu teléfono lo que ves en ella, y solo a donde la mandes.',
     // the web app
     'Get FuelRing Pro on iPhone': 'Obtén FuelRing Pro en iPhone', 'Get the iPhone app': 'Descarga la app para iPhone',
     'Installing FuelRing…': 'Instalando FuelRing…', 'Water goal reached 💧': 'Meta de agua cumplida 💧', 'web app': 'versión web', 'left': 'restantes', 'over': 'de más',
@@ -4870,7 +5007,7 @@ const App = (() => {
   const fdServ = f => Core.foodServing(state, f);
 
   function toast(msg, ms = 1600) {
-    const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+    const t = $('#toast'); t.classList.remove('done'); t.textContent = msg; t.classList.add('show'); toast.at = Date.now();
     clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), ms);
   }
   // Inside the iOS app a WKWebView can't download: an <a download> click would
@@ -4901,6 +5038,23 @@ const App = (() => {
       } catch (e) { /* fall back to a download */ }
     }
     return download(name, mime, text) ? handed() : false;
+  }
+  // A picture (a data: URL) to the share sheet or a download — the iPhone app takes it as base64
+  function saveImage(name, dataURL, done) {
+    const b64 = String(dataURL || '').split(',')[1] || '', mime = (/^data:(image\/[a-z]+)/.exec(dataURL) || [])[1] || 'image/png';
+    if (!b64) return false;
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'saveFile', name, base64: b64 }));
+      if (done) done();
+      return true;
+    }
+    let blob;
+    try {
+      const bin = atob(b64), bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      blob = new Blob([bytes], { type: mime });
+    } catch (e) { return false; }
+    return saveFile(name, mime, blob, done);
   }
   function download(name, mime, text) {
     if (typeof URL.createObjectURL !== 'function') return false;
@@ -5277,22 +5431,26 @@ const App = (() => {
   // can feel in the iPhone app. It never changes a number on the page: the
   // final values are in the DOM from the start (what tests and screen readers read).
   let lastFeel = 0;
-  function haptic(kind) { // 'light' | 'selection' | 'success', iPhone app only
+  // 'tap' (a press, soft) | 'light' (logged) | 'selection' (switched) | 'success'
+  // (a goal, a day done) — iPhone app only. Within 60 ms only one buzz, except
+  // that a press tap never swallows the meaningful one that follows it.
+  let lastKind = '';
+  function haptic(kind) {
     if (!NATIVE) return;
     const now = Date.now();
-    if (now - lastFeel < 60) return;
-    lastFeel = now;
+    if (now - lastFeel < 60 && (kind === 'tap' || lastKind !== 'tap')) return;
+    lastFeel = now; lastKind = kind;
     toWrapper({ type: 'haptic', kind });
   }
   // sparks in the macro colors out of an element (a goal reached, a day done)
-  function burst(el) {
+  function burst(el, n = 18) {
     if (!GLASS || !el || !el.isConnected || reduceMotion()) return;
     const r = el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     const layer = document.createElement('div');
     layer.className = 'burst'; layer.setAttribute('aria-hidden', 'true');
     const colors = ['#F07800', '#0078C8', '#7C4DBE', '#1B9E4B', '#FFB066'];
-    for (let i = 0; i < 18; i++) {
-      const a = (i / 18) * Math.PI * 2 + Math.random() * 0.3, d = 44 + Math.random() * 44, k = document.createElement('i');
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 + Math.random() * 0.3, d = 44 + Math.random() * 44, k = document.createElement('i');
       k.style.cssText = `left:${cx}px;top:${cy}px;background:${colors[i % colors.length]};--dx:${(Math.cos(a) * d).toFixed(1)}px;--dy:${(Math.sin(a) * d).toFixed(1)}px;animation-delay:${Math.round(Math.random() * 60)}ms`;
       layer.appendChild(k);
     }
@@ -5314,10 +5472,19 @@ const App = (() => {
     el.dataset.fx = fmt(from);
     requestAnimationFrame(step);
   }
+  // a log lands: the toast naming it pops with a check that draws itself, and sparks fly
+  function celebrate() {
+    const t = $('#toast');
+    // only the toast the log itself just showed ("… logged"), never an older one still fading
+    if (!GLASS || !t || !t.classList.contains('show') || !(Date.now() - (toast.at || 0) < 250) || reduceMotion()) return;
+    t.classList.remove('done'); void t.offsetWidth; t.classList.add('done');
+    burst(t, 12);
+  }
   const motion = (() => {
     let day = null;   // the viewed day's food, exercise and water after the last render
     let pills = {};   // where each pill sat after the last render
     const num = el => el ? parseInt(el.textContent.replace(/[^\d-]/g, ''), 10) : null;
+    const COUNTED = ['remaining', 'eqFood', 'eqEx']; // the header's numbers count to their new value
     // a ring is known by its label without the numbers ("Carbs # of # g"), so a
     // ring that appears (the Nutrition minis) never borrows another one's start
     const ringKeys = () => {
@@ -5338,8 +5505,9 @@ const App = (() => {
         const c = svg.querySelectorAll('circle')[1];
         rings[key] = !c ? '0 9999' : c.classList.contains('sweep') && fresh(c.dataset.sweepAt, 900) ? c.style.getPropertyValue('--from') : c.getAttribute('stroke-dasharray');
       });
-      const rem = $('#remaining');
-      return { tab: ui.tab, date: ui.date, rings, remaining: rem && fresh(rem.dataset.fxAt, 650) ? +rem.dataset.fxFrom : num(rem) };
+      const counts = {};
+      for (const id of COUNTED) { const el = $('#' + id); counts[id] = el && fresh(el.dataset.fxAt, 650) ? +el.dataset.fxFrom : num(el); }
+      return { tab: ui.tab, date: ui.date, rings, counts };
     }
     // a pill slides from where it was to where it is now: start it there with no
     // transition, then let it go. Every render draws fresh pills, and a fresh one
@@ -5380,8 +5548,10 @@ const App = (() => {
           if (!c || from == null || from === c.getAttribute('stroke-dasharray')) return;
           c.style.setProperty('--from', from); c.classList.add('sweep'); c.dataset.sweepAt = Date.now();
         });
-        const rem = $('#remaining'), to = num(rem);
-        if (rem && b.remaining != null && to != null && to !== b.remaining) countTo(rem, b.remaining, to);
+        for (const id of COUNTED) {
+          const el = $('#' + id), from = b.counts[id], to = num(el);
+          if (el && from != null && to != null && to !== from) countTo(el, from, to);
+        }
       }
       placePills(reduce);
       // logging: a light tap; the water goal: sparks and a success tap
@@ -5389,7 +5559,7 @@ const App = (() => {
       const t = Core.dayTotals(state, ui.date), cups = Core.waterFor(state, ui.date), goal = state.waterGoal || 8;
       const now = { date: ui.date, food: t.food.cal, ex: t.exercise, cups };
       if (day && day.date === now.date) {
-        if (now.food > day.food || now.ex > day.ex) haptic('light');
+        if (now.food > day.food || now.ex > day.ex) { haptic('light'); setTimeout(celebrate, 0); } // after the handler's "logged" toast
         if (now.cups !== day.cups) {
           if (day.cups < goal && now.cups >= goal) {
             haptic('success');
@@ -5402,17 +5572,60 @@ const App = (() => {
     }
     return { capture, after, pills: () => placePills(reduceMotion()) };
   })();
+  // iPhone web views only show :active (the springy press) when the page listens
+  // for touches; the iPhone app also turns the tap flash off, so without this a
+  // press showed nothing at all
+  document.addEventListener('touchstart', () => {}, { passive: true });
+  if (GLASS) {
+    // a press: a soft tap under the finger (the app only) — after 120 ms held
+    // still (about when iOS highlights a row in a scroll view) or on release,
+    // not when the touch turns into a scroll first. Tabs and switches give
+    // their own selection tap.
+    const PRESSABLE = 'button, .fresult, .entry.tapme, .qa-tile, [role=button], .swatch';
+    let press = null;
+    const unpress = () => { if (press) clearTimeout(press.t); press = null; };
+    document.addEventListener('pointerdown', e => {
+      const el = e.target.closest && e.target.closest(PRESSABLE);
+      if (!NATIVE || !el || el.disabled || el.closest('nav, .seg')) return;
+      unpress();
+      press = { x: e.clientX, y: e.clientY, t: setTimeout(() => { if (press) { press = null; haptic('tap'); } }, 120) };
+    }, { passive: true, capture: true });
+    document.addEventListener('pointermove', e => { if (press && Math.hypot(e.clientX - press.x, e.clientY - press.y) > 8) unpress(); }, { passive: true, capture: true });
+    document.addEventListener('pointercancel', unpress, { passive: true, capture: true });
+    document.addEventListener('pointerup', () => { if (press) { unpress(); haptic('tap'); } }, { passive: true, capture: true });
+    // swipe the diary left or right for the next or previous day
+    let swipe = null;
+    document.addEventListener('touchstart', e => {
+      swipe = null;
+      if (ui.tab !== 'diary' || ui.modal || !state.profile || !state.tourDone || e.touches.length !== 1) return;
+      if (e.target.closest('input, select, textarea, .seg, nav, .tour')) return;
+      swipe = { x: e.touches[0].clientX, y: e.touches[0].clientY, at: Date.now() };
+    }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const s0 = swipe; swipe = null;
+      if (!s0 || !e.changedTouches.length) return;
+      const dx = e.changedTouches[0].clientX - s0.x, dy = e.changedTouches[0].clientY - s0.y;
+      // clearly sideways, and either a long drag (any speed) or a short quick flick
+      if (Math.abs(dx) < 70 || Math.abs(dx) < 2.2 * Math.abs(dy) || (Math.abs(dx) < 110 && Date.now() - s0.at > 700)) return;
+      ui.daySlide = dx < 0 ? 'next' : 'prev';
+      haptic('selection');
+      shiftDate(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  }
   let lastTab = null, lastModal = null; // web: cards rise in when a tab opens and sheets when they open, not on every re-render
   function render() {
     stopScan(); // render replaces the DOM, so any live camera stream must be released
     applyTheme();
     applyLang();
     const app = $('#app');
+    if (ui.modal !== 'recap') ui.recapURL = null; // the recap picture (a few hundred KB) goes with its sheet
     if (!state.profile) { app.innerHTML = onboardingHTML(); bindOnboarding(); syncNative(); lastTab = null; if (GLASS) motion.after(null); return; }
     const before = GLASS ? motion.capture() : null;
     if (GLASS) {
       app.classList.toggle('enter', ui.tab !== lastTab); lastTab = ui.tab;
       app.classList.toggle('sheet-in', !!ui.modal && ui.modal !== lastModal); lastModal = ui.modal;
+      app.classList.toggle('day-next', ui.daySlide === 'next'); app.classList.toggle('day-prev', ui.daySlide === 'prev');
+      ui.daySlide = null; // one slide per day change, not on every redraw after it
     }
     app.innerHTML = headerHTML() + (GLASS ? minibarHTML() : '') + '<main id="main">' +
       (ui.tab === 'diary' ? diaryHTML() : ui.tab === 'foods' ? foodsHTML() : ui.tab === 'progress' ? progressHTML() : ui.tab === 'sleep' ? sleepPageHTML() : settingsHTML()) +
@@ -5623,9 +5836,9 @@ const App = (() => {
           return sh ? ` <span title="${tr(sh === 'high' ? 'High day' : 'Lighter day')}" aria-label="${tr(sh === 'high' ? 'High day' : 'Lighter day')}">${sh === 'high' ? '▲' : '▼'}</span>` : '';
         })()}</div></div>
         <span class="eq-op">−</span>
-        <div class="eq-part"><div class="n">${fmt(t.food.cal)}</div><div class="l">${tr('Food')}</div></div>
+        <div class="eq-part"><div class="n" id="eqFood">${fmt(t.food.cal)}</div><div class="l">${tr('Food')}</div></div>
         <span class="eq-op">+</span>
-        <div class="eq-part"><div class="n">${fmt(t.exercise)}</div><div class="l">${tr('Exercise')}</div></div>
+        <div class="eq-part"><div class="n" id="eqEx">${fmt(t.exercise)}</div><div class="l">${tr('Exercise')}</div></div>
         <span class="eq-op">=</span>
         <div class="eq-part eq-remaining ${over?'over':''}"><div class="n" id="remaining">${fmt(t.remaining)}</div><div class="l">${tr('Remaining')}</div></div>
       </div>
@@ -5664,7 +5877,7 @@ const App = (() => {
       const color = over ? 'var(--red)' : reached ? 'var(--green)' : 'var(--blue)';
       return `<div class="nutring" id="nut-${k}">
         ${ringSVG({ kind: 'mini', pct: target ? (val / target) * 100 : 0, color, center: Math.round(val), label: `${tr(label)} ${Math.round(val)} of ${target}${unit}` })}
-        <span class="nl">${tr(label)}</span>
+        <span class="nl">${tr(label)}${state.profile.microGoals && state.profile.microGoals[k] != null ? ` <span title="${tr('your target')}" aria-label="${tr('your target')}">★</span>` : ''}</span>
         <span class="nv ${over?'over':''}"><b>${Math.round(val)}</b>/${target}${unit}</span>
       </div>`;
     }).join('');
@@ -6165,6 +6378,7 @@ const App = (() => {
         </div>` : ''; })()}
       </div>
       <div class="chart-wrap" style="padding-top:0">${weekChartSVG(wk.days, g.calories)}</div>
+      ${iosHas('1.0.2') ? `<div style="padding:0 14px 14px"><button class="btn sec" id="shareWeek" style="margin-top:0">${isPro() ? '✨ ' : '🔒 '}${tr('Share my week')}${isPro() ? '' : ' · Pro'}</button></div>` : ''}
     </div>
     ${sleepHTML()}
     ${weeklyNutritionHTML()}
@@ -6530,15 +6744,36 @@ const App = (() => {
   }
   function listSegHTML() {
     if (ui.query) return '';
+    if (ui.listMode === 'ideas' && !isPro()) ui.listMode = 'recent'; // Pro ended mid-view
+    const ideas = iosHas('1.0.2') ? `
+      <button type="button" data-listmode="ideas" class="${ui.listMode === 'ideas' ? 'on' : ''}">${isPro() ? '✨ ' : '🔒 '}${tr('Ideas')}</button>` : '';
     return `<div class="seg" id="listMode" style="margin-top:8px">
-      <button type="button" data-listmode="recent" class="${ui.listMode !== 'frequent' ? 'on' : ''}">${tr('Recent')}</button>
-      <button type="button" data-listmode="frequent" class="${ui.listMode === 'frequent' ? 'on' : ''}">${tr('Frequent')}</button></div>`;
+      <button type="button" data-listmode="recent" class="${ui.listMode !== 'frequent' && ui.listMode !== 'ideas' ? 'on' : ''}">${tr('Recent')}</button>
+      <button type="button" data-listmode="frequent" class="${ui.listMode === 'frequent' ? 'on' : ''}">${tr('Frequent')}</button>${ideas}</div>`;
+  }
+  // saved meals sit above the list, except under Ideas (the ones that fit are in it)
+  const mealListHTML = () => ui.listMode === 'ideas' && !ui.query ? '' : mealRowsHTML(Core.searchSavedMeals(state, ui.query));
+  // Meal ideas (Pro): what fits the calories left today, protein-dense first when protein is short
+  function ideasHTML() {
+    const ideas = Core.mealIdeas(state, FOOD_DB, ui.date), es = state.lang === 'es';
+    if (!ideas || !ideas.items.length) {
+      return `<p class="hint" style="margin-top:8px" id="ideasEmpty">${tr(ideas && ideas.left < 60 ? "You're at today's goal — nothing left to fit." : "Nothing fits what's left yet.")}</p>`;
+    }
+    const gap = ideas.proteinGap >= 15;
+    const head = es ? `Te quedan ${fmt(ideas.left)} kcal${gap ? ` y ${ideas.proteinGap} g de proteína` : ''} — esto cabe:`
+      : `${fmt(ideas.left)} kcal${gap ? ` and ${ideas.proteinGap} g protein` : ''} left — these fit:`;
+    return `<p class="hint ideashead" id="ideasHead">${head}</p>` + ideas.items.map(it => it.kind === 'meal'
+      ? `<div class="fresult" data-pickmeal="${it.id}" role="button" tabindex="0">
+          <div><div class="fn">🍽 ${esc(it.name)}</div><div class="fs">${tr('saved meal')} · ${Math.round(it.p)} g ${tr('protein')}</div></div>
+          <span class="fc">${fmt(it.cal)}</span></div>`
+      : foodRowHTML(it.food, ` · ${Math.round(it.p)} g ${tr('protein')}${it.own ? ' · ★' : ''}`).replace('data-pick=', 'data-idea="1" data-pick=')).join('');
   }
   function searchListHTML() {
     if (ui.query) {
       return Core.searchFoods(state, FOOD_DB, ui.query).map(f => foodRowHTML(f)).join('')
         || `<p class="hint" style="margin-top:10px">${tr('No matches — try Create Food or Quick Add.')}</p>`;
     }
+    if (ui.listMode === 'ideas' && isPro()) return ideasHTML();
     if (ui.listMode === 'frequent') {
       return Core.frequentFoods(state, FOOD_DB).map(f => foodRowHTML(f, ` · ×${f.timesLogged}`)).join('')
         || `<p class="hint" style="margin-top:8px">${tr('Foods you log often appear here.')}</p>`;
@@ -6680,6 +6915,27 @@ const App = (() => {
         `<option value="${b}" ${b === boost ? 'selected' : ''}>+${b} kcal ${es ? 'esos días' : 'on those days'}</option>`).join('')}</select>
       <p class="hint" id="dayGoalsNote">${dayGoalsNote(sel, boost)}</p></div>`;
   }
+  // Custom nutrient targets (Pro): empty boxes keep the standard target, shown as the placeholder
+  function microGoalsHTML() {
+    const p = state.profile, es = state.lang === 'es', own = p.microGoals || null;
+    if (!iosHas('1.0.2') && !own) return ''; // set ones (from a backup) always show, so they can be cleared
+    if (!isPro() && !own) return `<div class="card" style="padding:14px" id="microCard"><p class="hint" style="margin:0"><span id="microLocked" style="cursor:pointer">🔒 ${es
+      ? 'Pon tus propias metas de fibra, azúcar, sodio, grasa saturada y colesterol'
+      : 'Set your own fiber, sugar, sodium, saturated fat and cholesterol targets'} · <b style="color:var(--orange)">Pro</b></span></p></div>`;
+    const std = Core.standardMicroTargets(p, Core.goalsForDate(state, Core.todayISO()).calories), R = Core.MICRO_GOAL_RANGES;
+    const box = (k, label, unit) => `<div class="field"><label for="mt-${k}">${tr(label)} (${unit})</label>
+      <input id="mt-${k}" type="number" inputmode="numeric" min="${R[k][0]}" max="${R[k][1]}" placeholder="${std[k]}" value="${own && own[k] != null ? own[k] : ''}"></div>`;
+    return `<h2 class="sect">${tr('Nutrient targets')}</h2>
+    <div class="card" style="padding:14px" id="microCard">
+      <div class="row2" style="margin-top:0">${box('fib', 'Fiber', 'g')}${box('sug', 'Sugar', 'g')}${box('sod', 'Sodium', 'mg')}</div>
+      <div class="row2">${box('sat', 'Sat Fat', 'g')}${box('chol', 'Cholesterol', 'mg')}</div>
+      <p class="hint">${es
+        ? 'Deja una casilla vacía para usar la meta estándar (en gris). Las tuyas reemplazan a las estándar en Nutrición, en el reporte semanal y en el coach.'
+        : 'Leave a box empty to keep the standard target (in gray). Yours replace the standard ones in Nutrition, the weekly report and the coach.'}</p>
+      <button class="btn sec" id="mt-save">${isPro() ? '' : '🔒 '}${tr('Save targets')}</button>
+      ${own ? `<button class="addrow" id="mt-reset" style="text-align:center">${tr('Use the standard targets')}</button>` : ''}
+    </div>`;
+  }
   function settingsHTML() {
     const p = state.profile, g = state.goals;
     return `<h2 class="sect" style="margin-top:14px">${tr('Profile & Goals')}</h2>
@@ -6753,6 +7009,7 @@ const App = (() => {
       ${dayGoalsHTML(p)}
       <button class="btn sec" id="st-save">${tr('Save & recalculate goals')}</button>
     </div>
+    ${microGoalsHTML()}
     <h2 class="sect">Apple Health</h2>
     <div class="card" style="padding:14px">
       ${window.ReactNativeWebView ? `<button class="btn sec" id="ah-connect" style="margin-top:0">${isPro() ? '' : '🔒 '}${tr('Sync with Apple Health')}${isPro() ? '' : ' · Pro'}</button>
@@ -6904,7 +7161,7 @@ const App = (() => {
     const tab = ([k, ic, l]) =>
       `<button data-tab="${k}" class="${ui.tab === k || (k === 'progress' && ui.tab === 'sleep') ? 'on' : ''}" aria-label="${tr(l)}"><span class="ic">${ic}</span>${tr(l)}</button>`;
     return `<nav>${GLASS ? '<i class="tabpill" aria-hidden="true"></i>' : ''}${tab(['diary','📖','Diary'])}${tab(['foods','🍽','Foods'])}
-      <button id="navPlus" class="navplus" aria-label="${tr('Add')}"><span>+</span></button>
+      <button id="navPlus" class="navplus${GLASS && ui.tab === 'diary' && ui.date === Core.todayISO() && !Core.dayTotals(state, ui.date).food.cal ? ' invite' : ''}" aria-label="${tr('Add')}"><span>+</span></button>
       ${tab(['progress','📈','Progress'])}${tab(['settings','⚙️','Settings'])}</nav>`;
   }
 
@@ -6952,6 +7209,7 @@ const App = (() => {
     if (ui.modal === 'share') return shareModalHTML();
     if (ui.modal === 'editfood') return editFoodModalHTML();
     if (ui.modal === 'pro') return proModalHTML();
+    if (ui.modal === 'recap') return recapModalHTML();
     const mealLabel = tr(MEALS.find(m => m[0] === ui.modal)[1]);
     let body = '';
     if (ui.selMealId) {
@@ -6974,7 +7232,7 @@ const App = (() => {
     } else if (ui.modalTab === 'search') {
       body = `<div class="search"><input id="foodQ" type="search" placeholder="${tr('Search foods…')}" value="${esc(ui.query)}" autocomplete="off"></div>
         <div id="listSeg">${listSegHTML()}</div>
-        <div id="mealResults">${mealRowsHTML(Core.searchSavedMeals(state, ui.query))}</div>
+        <div id="mealResults">${mealListHTML()}</div>
         <div id="results">${searchListHTML()}</div>`;
     } else if (ui.modalTab === 'scan') {
       // Camera-first: the camera starts (or the native scanner opens) as soon as
@@ -7060,7 +7318,10 @@ const App = (() => {
       ['🍽', tr('Unlimited saved meals'), `${tr('free keeps')} ${FREE_MEAL_LIMIT}`],
       ['❤️', tr('Live Apple Health sync'), tr('workouts, sleep, steps & weight, automatically')],
       ['🥑', tr('Net carbs, gram goals + CSV'), tr('keto view, exact macro grams, spreadsheet export')],
-      ['🎨', tr('Color themes & app icons'), tr('make FuelRing yours'), '1.0.2'],
+      ['✨', tr('Meal ideas that fit'), tr("foods and meals that fit what's left today"), '1.0.2'],
+      ['🖼️', tr('Weekly recap card'), tr('a picture of your week to share'), '1.0.2'],
+      ['🧪', tr('Custom nutrient targets'), tr('your own fiber, sugar, sodium, sat fat & cholesterol'), '1.0.2'],
+      ['🎨', tr('Color themes & app icons'), tr('themes that tint the glass, plus app icons'), '1.0.2'],
     ].filter(r => !r[3] || iosHas(r[3]));
     return `<div class="modal" id="modal"><div class="sheet" role="dialog" aria-label="FuelRing Pro">
       <div class="sheet-h"><h3>Fuel<span style="color:#F07800">Ring</span> Pro</h3><button id="closeModal" aria-label="${tr('Close')}">✕</button></div>
@@ -7072,6 +7333,103 @@ const App = (() => {
         : `<div class="pro-cta"><button class="btn" id="proBuy" style="margin-top:0">${state.lang === 'es' ? `Desbloquear Pro — ${esc(price)} una vez, para siempre` : `Unlock Pro — ${esc(price)} once, forever`}</button></div>
         <button class="addrow" id="proRestore" style="text-align:center">${tr('Restore purchases')}</button>
         <p class="hint" style="text-align:center">${tr('One-time purchase. No subscription. Your data stays on your phone either way.')}</p>`}
+      </div></div></div>`;
+  }
+  // The week as words: the picture's alt text, and what shows where a canvas can't draw
+  function recapText(r) {
+    const es = state.lang === 'es';
+    return es
+      ? `Mi semana en FuelRing: ${r.daysLogged}/7 días registrados, ${fmt(r.avgCal)} kcal al día (meta ${fmt(r.goalCal)}), ${r.avgProtein} g de proteína al día, racha de ${r.streak} días.`
+      : `My week on FuelRing: ${r.daysLogged}/7 days logged, ${fmt(r.avgCal)} kcal a day (goal ${fmt(r.goalCal)}), ${r.avgProtein} g protein a day, a ${r.streak}-day streak.`;
+  }
+  // The weekly recap picture (1080×1350, 4:5 for Instagram and Messages): the
+  // theme's sky with its three lights, the average-calories ring, three glass
+  // tiles and the week day by day against each day's goal
+  function recapCanvas(r) {
+    const W = 1080, H = 1350, c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    let x = null;
+    try { x = c.getContext('2d'); } catch (e) { /* no canvas here */ }
+    if (!x || !r) return null;
+    const es = state.lang === 'es', cs = getComputedStyle(document.documentElement);
+    const v = (n, d) => (cs.getPropertyValue(n) || '').trim() || d;
+    const FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
+    const font = (w, px) => { x.font = `${w} ${px}px ${FONT}`; };
+    const bg = x.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, v('--chrome1', '#002850')); bg.addColorStop(1, v('--chrome2', '#003C74'));
+    x.fillStyle = bg; x.fillRect(0, 0, W, H);
+    const light = (lx, ly, rad, col) => {
+      const g = x.createRadialGradient(lx, ly, 0, lx, ly, rad);
+      g.addColorStop(0, col); g.addColorStop(1, 'rgba(0,0,0,0)');
+      x.fillStyle = g; x.fillRect(0, 0, W, H);
+    };
+    light(150, 140, 560, v('--au1', 'rgba(0,120,200,.7)'));
+    light(1010, 620, 500, v('--au2', 'rgba(240,120,0,.55)'));
+    light(380, 1320, 560, v('--au3', 'rgba(124,77,190,.48)'));
+    const round = (px, py, w, h, rad) => {
+      x.beginPath(); x.moveTo(px + rad, py);
+      x.arcTo(px + w, py, px + w, py + h, rad); x.arcTo(px + w, py + h, px, py + h, rad);
+      x.arcTo(px, py + h, px, py, rad); x.arcTo(px, py, px + w, py, rad); x.closePath();
+    };
+    const pane = (px, py, w, h) => { round(px, py, w, h, 36); x.fillStyle = 'rgba(255,255,255,.12)'; x.fill(); x.strokeStyle = 'rgba(255,255,255,.28)'; x.lineWidth = 2; x.stroke(); };
+    // the brand and the week's dates
+    x.textAlign = 'left'; x.textBaseline = 'alphabetic';
+    font(800, 40); x.fillStyle = '#fff'; x.fillText('FUEL', 80, 110);
+    const fw = x.measureText('FUEL').width; x.fillStyle = '#F07800'; x.fillText('RING', 80 + fw, 110);
+    font(800, 96); x.fillStyle = '#fff'; x.fillText(tr('My week'), 80, 230);
+    const day = iso => new Date(iso + 'T12:00:00').toLocaleDateString(LOC(), { month: 'short', day: 'numeric' });
+    font(600, 40); x.fillStyle = 'rgba(255,255,255,.72)'; x.fillText(`${day(r.start)} – ${day(r.end)}`, 80, 292);
+    // the ring: the average day against the average goal
+    const cx = W / 2, cy = 530, R = 180, pct = r.goalCal ? r.avgCal / r.goalCal : 0;
+    x.lineCap = 'round'; x.lineWidth = 36;
+    x.strokeStyle = 'rgba(255,255,255,.14)'; x.beginPath(); x.arc(cx, cy, R, 0, Math.PI * 2); x.stroke();
+    if (pct > 0) {
+      x.strokeStyle = pct > 1 ? '#FF6B61' : '#3DDC84';
+      x.beginPath(); x.arc(cx, cy, R, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.min(1, pct)); x.stroke();
+    }
+    x.textAlign = 'center'; x.fillStyle = '#fff'; font(800, 100); x.fillText(fmt(r.avgCal), cx, cy + 14);
+    font(600, 30); x.fillStyle = 'rgba(255,255,255,.8)'; x.fillText(es ? 'kcal al día' : 'kcal a day', cx, cy + 62);
+    font(600, 26); x.fillStyle = 'rgba(255,255,255,.6)'; x.fillText(`${es ? 'meta' : 'goal'} ${fmt(r.goalCal)}`, cx, cy + 100);
+    // three glass tiles
+    [[`${r.daysLogged}/7`, es ? 'días registrados' : 'days logged'], [`🔥 ${r.streak}`, es ? 'días seguidos' : 'day streak'],
+      [`${r.avgProtein} g`, es ? 'proteína al día' : 'protein a day']].forEach(([big, small], i) => {
+      const tw = 290, px = 80 + i * (tw + 35), py = 785;
+      pane(px, py, tw, 165);
+      x.fillStyle = '#fff'; font(800, 56); x.fillText(big, px + tw / 2, py + 86);
+      x.fillStyle = 'rgba(255,255,255,.75)'; font(600, 28); x.fillText(small, px + tw / 2, py + 132);
+    });
+    // the week, a bar per day against that day's goal (the orange tick)
+    const bx = 100, base = 1170, bh = 130, colW = (W - 200) / 7;
+    const top = Math.max(1, ...r.days.map(d => Math.max(d.cal, d.goal))) * 1.12;
+    pane(60, 990, W - 120, 245);
+    const DOW = es ? ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'] : ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    r.days.forEach((d, i) => {
+      const w = colW * 0.52, x0 = bx + i * colW + (colW - w) / 2, h = Math.max(8, d.cal / top * bh);
+      round(x0, base - (d.logged ? h : 8), w, d.logged ? h : 8, d.logged ? 12 : 4);
+      x.fillStyle = !d.logged ? 'rgba(255,255,255,.25)' : d.cal > d.goal ? '#FF8A80' : 'rgba(255,255,255,.92)'; x.fill();
+      const gy = base - d.goal / top * bh;
+      x.strokeStyle = '#F07800'; x.lineWidth = 5; x.lineCap = 'round';
+      x.beginPath(); x.moveTo(x0 - 8, gy); x.lineTo(x0 + w + 8, gy); x.stroke();
+      x.fillStyle = 'rgba(255,255,255,.7)'; font(700, 28); x.fillText(DOW[new Date(d.date + 'T12:00:00').getDay()], x0 + w / 2, base + 46);
+    });
+    // the line under it
+    const parts = [es ? `${r.within} de ${r.daysLogged} días dentro de tu meta` : `${r.within} of ${r.daysLogged} days within budget`];
+    const moved = r.weightChange ? dW(Math.abs(r.weightChange)) : 0;
+    if (moved > 0) parts.push(`${r.weightChange > 0 ? '+' : '−'}${moved} ${U().weight}`);
+    x.fillStyle = '#fff'; font(700, 34); x.fillText(parts.join('  ·  '), W / 2, 1292);
+    x.fillStyle = 'rgba(255,255,255,.55)'; font(600, 26); x.fillText(es ? 'Registrado con FuelRing' : 'Tracked with FuelRing', W / 2, 1332);
+    return c;
+  }
+  function recapModalHTML() {
+    const r = Core.weekRecap(state, ui.date);
+    // a JPEG: a tenth of the PNG's size for the same picture (it's all gradients)
+    if (ui.recapURL == null) { const c = recapCanvas(r); ui.recapURL = c ? c.toDataURL('image/jpeg', 0.92) : ''; }
+    return `<div class="modal" id="modal"><div class="sheet" role="dialog" aria-label="${tr('My week')}">
+      <div class="sheet-h"><h3>${tr('My week')}</h3><button id="closeModal" aria-label="${tr('Close')}">✕</button></div>
+      <div class="sheet-b">
+        ${ui.recapURL ? `<img class="recapimg" id="recapImg" src="${ui.recapURL}" alt="${esc(recapText(r))}">` : `<p class="hint" id="recapText">${esc(recapText(r))}</p>`}
+        <button class="btn" id="recapShare"${ui.recapURL ? '' : ' disabled'}>${tr('Share')}</button>
+        <p class="hint" style="text-align:center">${tr("A picture of your week. Only what's on it leaves your phone, and only where you send it.")}</p>
       </div></div></div>`;
   }
   function shareModalHTML() {
@@ -7230,7 +7588,37 @@ const App = (() => {
   }
 
   // ---------- BIND ----------
+  // A sheet follows the finger down from its header (the grabber) and closes
+  // past ~120 px or on a flick, the same way its ✕ does; otherwise it springs back.
+  function bindSheetDrag() {
+    const sheet = GLASS && $('#modal .sheet'), grab = sheet && sheet.querySelector('.sheet-h');
+    if (!grab) return;
+    let y0 = null, dy = 0, t0 = 0;
+    grab.addEventListener('touchstart', e => {
+      if (e.touches.length !== 1 || e.target.closest('button, input, select')) return;
+      y0 = e.touches[0].clientY; dy = 0; t0 = Date.now(); sheet.style.transition = 'none';
+    }, { passive: true });
+    grab.addEventListener('touchmove', e => {
+      if (y0 == null) return;
+      dy = Math.max(0, e.touches[0].clientY - y0);
+      sheet.style.transform = dy ? `translateY(${dy}px)` : '';
+      e.preventDefault(); // the page behind must not scroll while the sheet is held
+    }, { passive: false });
+    const end = () => {
+      if (y0 == null) return;
+      y0 = null; sheet.style.transition = '';
+      const flick = dy > 40 && dy / Math.max(1, Date.now() - t0) > 0.6;
+      if (dy > 120 || flick) {
+        sheet.style.transform = 'translateY(110%)';
+        haptic('light');
+        setTimeout(() => { const x = $('#closeModal'); if (x) x.click(); else { ui.modal = null; render(); } }, 200);
+      } else sheet.style.transform = '';
+    };
+    grab.addEventListener('touchend', end, { passive: true });
+    grab.addEventListener('touchcancel', end, { passive: true });
+  }
   function bind() {
+    bindSheetDrag();
     $('#tourNext')?.addEventListener('click', () => {
       if ((ui.tourStep || 0) >= TOUR_STEPS.length - 1) { ui.tourStep = 0; set(Core.setTourDone(state)); }
       else { ui.tourStep = (ui.tourStep || 0) + 1; render(); }
@@ -7238,8 +7626,8 @@ const App = (() => {
     $('#tourSkip')?.addEventListener('click', () => { ui.tourStep = 0; set(Core.setTourDone(state)); });
     // the tour ends and the purchase sheet opens; closing it lands on the diary
     $('#tourPro')?.addEventListener('click', () => { ui.tourStep = 0; ui.modal = 'pro'; set(Core.setTourDone(state)); });
-    $('#prevDay')?.addEventListener('click', () => shiftDate(-1));
-    $('#nextDay')?.addEventListener('click', () => shiftDate(1));
+    $('#prevDay')?.addEventListener('click', () => { ui.daySlide = 'prev'; shiftDate(-1); });
+    $('#nextDay')?.addEventListener('click', () => { ui.daySlide = 'next'; shiftDate(1); });
     $('#dateJump')?.addEventListener('change', e => {
       if (/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)) { ui.date = e.target.value; render(); }
     });
@@ -7394,7 +7782,7 @@ const App = (() => {
     if (q) q.addEventListener('input', () => {
       ui.query = q.value;
       $('#listSeg').innerHTML = listSegHTML();
-      $('#mealResults').innerHTML = mealRowsHTML(Core.searchSavedMeals(state, ui.query));
+      $('#mealResults').innerHTML = mealListHTML();
       $('#results').innerHTML = searchListHTML();
       bindPicks(); bindMealPicks(); bindListMode();
       if (GLASS) motion.pills(); // the switch comes back when the box is cleared
@@ -7402,10 +7790,12 @@ const App = (() => {
     bindPicks(); bindMealPicks(); bindListMode();
     function bindListMode() {
       document.querySelectorAll('[data-listmode]').forEach(b => b.addEventListener('click', () => {
+        if (b.dataset.listmode === 'ideas' && !isPro()) return openPro();
         ui.listMode = b.dataset.listmode;
         $('#listSeg').innerHTML = listSegHTML();
+        $('#mealResults').innerHTML = mealListHTML();
         $('#results').innerHTML = searchListHTML();
-        bindPicks(); bindListMode();
+        bindPicks(); bindMealPicks(); bindListMode();
         if (GLASS) motion.pills(); // redrawn in place (the search box keeps focus), so slide its pill here
       }));
     }
@@ -7432,7 +7822,11 @@ const App = (() => {
     }
     function bindPicks() {
       document.querySelectorAll('[data-pick]').forEach(el => {
-        const go = () => { pickFood([...state.customFoods, ...FOOD_DB].find(f => f.id === el.dataset.pick)); render(); };
+        const go = () => {
+          pickFood([...state.customFoods, ...FOOD_DB].find(f => f.id === el.dataset.pick));
+          if (el.dataset.idea) { ui.unit = 'serving'; ui.servings = 1; } // the serving the idea said fits, not the last amount
+          render();
+        };
         el.addEventListener('click', go);
         el.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
       });
@@ -7730,6 +8124,26 @@ const App = (() => {
     }));
     $('#st-boost')?.addEventListener('change', dayNoteRefresh);
     $('#dayGoalsLocked')?.addEventListener('click', openPro);
+    $('#microLocked')?.addEventListener('click', openPro);
+    $('#mt-save')?.addEventListener('click', () => {
+      if (!isPro()) return openPro();
+      const typed = {};
+      for (const k of Object.keys(Core.MICRO_GOAL_RANGES)) typed[k] = $('#mt-' + k).value;
+      const next = Core.setMicroGoals(state, typed);
+      const filled = Object.values(typed).filter(val => String(val).trim() !== '').length;
+      const kept = next.profile.microGoals ? Object.keys(next.profile.microGoals).length : 0;
+      set(next);
+      toast(tr(kept < filled ? 'Saved — a value out of range was left at the standard target' : kept ? 'Nutrient targets saved' : 'Back to the standard targets'));
+    });
+    $('#mt-reset')?.addEventListener('click', () => { set(Core.setMicroGoals(state, null)); toast(tr('Back to the standard targets')); });
+    $('#shareWeek')?.addEventListener('click', () => {
+      if (!isPro()) return openPro();
+      ui.modal = 'recap'; ui.recapURL = null; render();
+    });
+    $('#recapShare')?.addEventListener('click', () => {
+      const ext = /^data:image\/jpeg/.test(ui.recapURL || '') ? 'jpg' : 'png';
+      if (!saveImage(`fuelring-week-${ui.date}.${ext}`, ui.recapURL)) toast(tr('Not supported in this browser'));
+    });
     // % <-> grams: toggled in place (no re-render) so edits elsewhere in the form survive
     document.querySelectorAll('[data-macromode]').forEach(b => b.addEventListener('click', () => {
       const grams = b.dataset.macromode === 'grams';
