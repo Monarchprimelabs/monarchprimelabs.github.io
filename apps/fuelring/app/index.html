@@ -2,6 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<!-- Content Security Policy: the page runs only its own inline code, shows only
+     inline images, and talks to one place: Open Food Facts, for the barcode
+     lookup. Even if bad data ever got into the page as code, it couldn't send
+     anything anywhere. build.js adds the web app's own files ('self') for the
+     web edition; tests pin both. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src https://world.openfoodfacts.org; manifest-src 'self'; worker-src 'self'; child-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'; frame-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>FuelRing — Calorie &amp; Macro Tracker</title>
 <meta name="theme-color" content="#002850">
