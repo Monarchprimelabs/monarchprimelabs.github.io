@@ -383,6 +383,45 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   .glass .btn,.glass .qa-tile,.glass .fresult,.glass .swatch,.glass .seg button,.glass nav button{transition:transform .32s cubic-bezier(.3,1.6,.5,1),background .2s,box-shadow .2s}
   .glass .btn:active,.glass .qa-tile:active,.glass .fresult:active,.glass .swatch:active,.glass .seg button:active,.glass nav button:active{transform:scale(.96)}
 
+  /* inside the iPhone app the strip behind the clock is native and solid navy:
+     the header (and the compact bar) start in exactly that color, no seam */
+  .native.glass header{background:linear-gradient(180deg,var(--chrome1) 0,transparent 44px),linear-gradient(160deg,color-mix(in srgb,var(--chrome1) 86%,transparent),color-mix(in srgb,var(--chrome2) 74%,transparent))}
+  .native.glass .minibar{background:linear-gradient(180deg,var(--chrome1) 0,transparent 18px),linear-gradient(160deg,color-mix(in srgb,var(--chrome1) 93%,transparent),color-mix(in srgb,var(--chrome2) 88%,transparent))}
+  /* the lit pill slides to the selected tab, and to the selected side of a switch */
+  .glass nav .tabpill{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:22px;background:rgba(240,120,0,.14);pointer-events:none;
+    transition:transform .5s cubic-bezier(.3,1.35,.5,1),width .5s cubic-bezier(.3,1.35,.5,1)}
+  .glass nav.pilled button.on::before{display:none}
+  .glass .seg{position:relative}
+  .glass .seg .segpill{position:absolute;top:3px;bottom:3px;left:0;width:0;border-radius:11px;background:rgba(255,255,255,.92);
+    box-shadow:0 4px 12px rgba(10,30,60,.12),inset 0 1px 0 #fff;pointer-events:none;transition:transform .45s cubic-bezier(.3,1.35,.5,1),width .45s cubic-bezier(.3,1.35,.5,1)}
+  :root[data-theme="dark"].glass .seg .segpill{background:rgba(255,255,255,.15);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+  .glass .seg button{position:relative;z-index:1}
+  .glass .seg.pilled button.on{background:transparent;box-shadow:none}
+  /* what changed: rings sweep from their old value, "Remaining" counts */
+  @keyframes sweepFrom{from{stroke-dasharray:var(--from)}}
+  .glass .ring circle.sweep{animation:sweepFrom .9s cubic-bezier(.2,.8,.2,1)}
+  .glass .countfx{position:relative;-webkit-text-fill-color:transparent}
+  .glass .countfx::after{content:attr(data-fx);position:absolute;left:0;right:0;top:0;-webkit-text-fill-color:currentColor}
+  /* a goal reached or a day done: sparks, and a check that draws itself */
+  .burst{position:fixed;inset:0;pointer-events:none;z-index:70}
+  .burst i{position:absolute;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;animation:spark .9s cubic-bezier(.15,.7,.3,1) forwards}
+  @keyframes spark{0%{transform:translate(0,0) scale(.3);opacity:1}75%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1);opacity:0}}
+  .donecheck{display:flex;justify-content:center;margin:4px 0 8px}
+  .donecheck svg{width:64px;height:64px;animation:popIn .6s cubic-bezier(.3,1.6,.5,1) both}
+  .donecheck circle{stroke-dasharray:176;stroke-dashoffset:176;animation:drawIn .6s cubic-bezier(.2,.8,.2,1) .1s forwards}
+  .donecheck path{stroke-dasharray:40;stroke-dashoffset:40;animation:drawIn .4s cubic-bezier(.2,.8,.2,1) .55s forwards}
+  @keyframes drawIn{to{stroke-dashoffset:0}}
+  @keyframes popIn{from{transform:scale(.6);opacity:0}}
+  /* the Progress bars grow up from the baseline when the tab opens */
+  @keyframes growUp{from{transform:scaleY(0)}}
+  .glass #app.enter .card svg rect[rx]{transform-box:fill-box;transform-origin:50% 100%;animation:growUp .8s cubic-bezier(.2,.8,.2,1) both}
+  .glass #app.enter .card svg rect[rx]:nth-of-type(2){animation-delay:.04s}
+  .glass #app.enter .card svg rect[rx]:nth-of-type(3){animation-delay:.08s}
+  .glass #app.enter .card svg rect[rx]:nth-of-type(4){animation-delay:.12s}
+  .glass #app.enter .card svg rect[rx]:nth-of-type(5){animation-delay:.16s}
+  .glass #app.enter .card svg rect[rx]:nth-of-type(6){animation-delay:.2s}
+  .glass #app.enter .card svg rect[rx]:nth-of-type(n+7){animation-delay:.24s}
+
   /* motion: a tab's cards rise in and its rings fill (once per tab, not on every update) */
   @keyframes riseIn{from{opacity:0;transform:translateY(16px)}}
   @keyframes ringIn{from{stroke-dasharray:0 999}}
@@ -397,14 +436,22 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   .glass #app.enter .ring circle+circle{animation:ringIn 1.1s cubic-bezier(.2,.8,.2,1) .15s both}
   .glass #app.sheet-in .sheet{animation:sheetUp .45s cubic-bezier(.2,.9,.25,1.04)}
   .webhero .arc{animation:ringIn 1.4s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * .15s + .15s)}
-  @media (prefers-reduced-transparency: reduce){
-    .glass nav,.glass .sheet,.glass .tour-card{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}
-    .glass header,.glass .minibar{background:linear-gradient(160deg,var(--chrome1),var(--chrome2));-webkit-backdrop-filter:none;backdrop-filter:none}
-    .glass .card,.glass #onbForm{background:var(--card)}
-  }
+  /* Reduce Transparency (html.solid, set by the page or the iPhone app): solid panes and the
+     classic header. :root.solid outranks the dark-mode glass rules */
+  :root.solid.glass nav,:root.solid.glass .sheet,:root.solid.glass .tour-card{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}
+  :root.solid.glass header,:root.solid.glass .minibar{background:linear-gradient(160deg,var(--chrome1),var(--chrome2));-webkit-backdrop-filter:none;backdrop-filter:none}
+  :root.solid.glass .card,:root.solid.glass #onbForm{background:var(--card)}
+  :root.solid.glass .card::before,:root.solid.glass header::before{display:none}
+  :root.solid.glass .modal{background:rgba(10,27,46,.5);-webkit-backdrop-filter:none;backdrop-filter:none}
+  :root.solid.glass .tour{background:rgba(4,12,22,.72);-webkit-backdrop-filter:none;backdrop-filter:none}
+  :root.solid.glass .toast{background:var(--chrome1);-webkit-backdrop-filter:none;backdrop-filter:none}
   @media (prefers-reduced-motion: reduce){
-    .glass .aurora i,.glass #app.enter main>*,.glass #app.enter .ring circle+circle,.glass #app.sheet-in .sheet,.webhero .arc{animation:none}
-    .glass .minibar{transition:none}
+    /* :nth-child(n) matches the specificity of the rules that start each light */
+    .glass .aurora i:nth-child(n),.glass #app.enter main>*,.glass #app.enter .ring circle+circle,.glass #app.sheet-in .sheet,.webhero .arc,
+    .glass .ring circle.sweep,.glass #app.enter .card svg rect[rx],.donecheck svg{animation:none}
+    .donecheck circle,.donecheck path{animation:none;stroke-dashoffset:0}
+    .burst{display:none}
+    .glass .minibar,.glass nav .tabpill,.glass .seg .segpill{transition:none}
   }
   @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 </style>
@@ -4443,12 +4490,28 @@ const App = (() => {
   const IOS_LIVE = String(window.__FR_IOS_LIVE || APP_VERSION);
   const verNum = v => { const p = String(v).split('.').map(n => parseInt(n, 10) || 0); while (p.length < 3) p.push(0); return p[0] * 1e6 + p[1] * 1e3 + p[2]; };
   const iosHas = v => !WEB || verNum(IOS_LIVE) >= verNum(v);
-  if (WEB) {
+  // The Liquid Glass look and its motion: the web app and the iPhone app
+  // (owner-approved 2026-11-05). The double-clicked file keeps the classic look.
+  const NATIVE = !!window.ReactNativeWebView;
+  const GLASS = WEB || NATIVE;
+  if (WEB && standalone()) document.documentElement.classList.add('in-app'); // opened from the Home Screen: behave like an app
+  if (NATIVE) document.documentElement.classList.add('native');
+  if (GLASS) {
     document.documentElement.classList.add('glass');
-    if (standalone()) document.documentElement.classList.add('in-app'); // opened from the Home Screen: behave like an app
     // three slow lights in the macro colors, behind the glass (still with Reduce Motion)
     document.body.insertAdjacentHTML('afterbegin', '<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>');
+    // Reduce Transparency turns the glass solid (html.solid). A browser that knows
+    // the setting reports it here; in the iPhone app WebKit doesn't, so the wrapper
+    // reads it from iOS and calls window.__onReduceTransparency
+    const solid = on => document.documentElement.classList.toggle('solid', !!on);
+    window.__onReduceTransparency = solid;
+    const rt = !NATIVE && window.matchMedia ? window.matchMedia('(prefers-reduced-transparency: reduce)') : null;
+    if (rt && rt.media !== 'not all') {
+      solid(rt.matches);
+      if (rt.addEventListener) rt.addEventListener('change', e => solid(e.matches));
+    }
   }
+  const reduceMotion = () => !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   let state = load();
   let ui = { tab: 'diary', date: Core.todayISO(), modal: null, modalTab: 'search', listMode: 'recent', selFood: null, selMealId: null, mealCount: 1, servings: 1, unit: 'serving', query: '', scanBarcode: null, scanPrefill: null, scanManual: false, scanFailed: false, scanAutoNative: false, nutritionOpen: false, range: 'week', editFoodId: null, metric: 'waist', editEntry: null, editServings: 1, editUnit: 'serving', editExId: null, nutrient: 'p' };
 
@@ -4788,7 +4851,7 @@ const App = (() => {
     'Color themes & app icons': 'Temas de color e íconos', 'make FuelRing yours': 'haz FuelRing a tu manera',
     // the web app
     'Get FuelRing Pro on iPhone': 'Obtén FuelRing Pro en iPhone', 'Get the iPhone app': 'Descarga la app para iPhone',
-    'Installing FuelRing…': 'Instalando FuelRing…', 'web app': 'versión web', 'left': 'restantes', 'over': 'de más',
+    'Installing FuelRing…': 'Instalando FuelRing…', 'Water goal reached 💧': 'Meta de agua cumplida 💧', 'web app': 'versión web', 'left': 'restantes', 'over': 'de más',
     'Moving from another phone, or between the web app and the iPhone app? Back up there, then restore the file here.': '¿Vienes de otro teléfono, o pasas entre la versión web y la app de iPhone? Guarda un respaldo allá y restaura el archivo aquí.',
     'Want to scan with the camera? The FuelRing iPhone app does it, free.': '¿Quieres escanear con la cámara? La app de FuelRing para iPhone lo hace, gratis.',
     '16:8, 18:6 or 20:4 with a live timer and a done alert': '16:8, 18:6 o 20:4 con temporizador en vivo y aviso al terminar',
@@ -5186,23 +5249,153 @@ const App = (() => {
   }
 
   // ---------- RENDER ----------
+  // ---------- MOTION (the glass editions): what changed, moves ----------
+  // render() rebuilds the page, so motion replays from a snapshot taken just
+  // before it: rings sweep from their old value, "Remaining" counts to its
+  // new number, the tab and switch pills slide, and logging gives a tap you
+  // can feel in the iPhone app. It never changes a number on the page: the
+  // final values are in the DOM from the start (what tests and screen readers read).
+  let lastFeel = 0;
+  function haptic(kind) { // 'light' | 'selection' | 'success', iPhone app only
+    if (!NATIVE) return;
+    const now = Date.now();
+    if (now - lastFeel < 60) return;
+    lastFeel = now;
+    toWrapper({ type: 'haptic', kind });
+  }
+  // sparks in the macro colors out of an element (a goal reached, a day done)
+  function burst(el) {
+    if (!GLASS || !el || !el.isConnected || reduceMotion()) return;
+    const r = el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    const layer = document.createElement('div');
+    layer.className = 'burst'; layer.setAttribute('aria-hidden', 'true');
+    const colors = ['#F07800', '#0078C8', '#7C4DBE', '#1B9E4B', '#FFB066'];
+    for (let i = 0; i < 18; i++) {
+      const a = (i / 18) * Math.PI * 2 + Math.random() * 0.3, d = 44 + Math.random() * 44, k = document.createElement('i');
+      k.style.cssText = `left:${cx}px;top:${cy}px;background:${colors[i % colors.length]};--dx:${(Math.cos(a) * d).toFixed(1)}px;--dy:${(Math.sin(a) * d).toFixed(1)}px;animation-delay:${Math.round(Math.random() * 60)}ms`;
+      layer.appendChild(k);
+    }
+    document.body.appendChild(layer);
+    setTimeout(() => layer.remove(), 1200);
+  }
+  // "Remaining" counts to its new value; the real number is already the element's text
+  function countTo(el, from, to) {
+    const t0 = performance.now(), dur = 650;
+    el.classList.add('countfx');
+    el.dataset.fxFrom = from; el.dataset.fxAt = Date.now();
+    const step = now => {
+      if (!el.isConnected) return;
+      const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      el.dataset.fx = fmt(from + (to - from) * e);
+      if (p < 1) requestAnimationFrame(step);
+      else { el.classList.remove('countfx'); delete el.dataset.fx; }
+    };
+    el.dataset.fx = fmt(from);
+    requestAnimationFrame(step);
+  }
+  const motion = (() => {
+    let day = null;   // the viewed day's food, exercise and water after the last render
+    let pills = {};   // where each pill sat after the last render
+    const num = el => el ? parseInt(el.textContent.replace(/[^\d-]/g, ''), 10) : null;
+    // a ring is known by its label without the numbers ("Carbs # of # g"), so a
+    // ring that appears (the Nutrition minis) never borrows another one's start
+    const ringKeys = () => {
+      const seen = {};
+      return [...document.querySelectorAll('#main svg.ring')].map(svg => {
+        const k = (svg.getAttribute('aria-label') || '').replace(/[\d.,]+/g, '#') + '|' + svg.getAttribute('class');
+        seen[k] = (seen[k] || 0) + 1;
+        return { svg, key: k + '|' + seen[k] };
+      });
+    };
+    // Handlers often draw twice in a row (save, then close the sheet). A sweep
+    // or count started a moment ago hands its starting point to the next draw,
+    // so it plays once, from the real old value, instead of being cut off.
+    const fresh = (at, ms) => at && Date.now() - +at < ms;
+    function capture() {
+      const rings = {};
+      ringKeys().forEach(({ svg, key }) => {
+        const c = svg.querySelectorAll('circle')[1];
+        rings[key] = !c ? '0 9999' : c.classList.contains('sweep') && fresh(c.dataset.sweepAt, 900) ? c.style.getPropertyValue('--from') : c.getAttribute('stroke-dasharray');
+      });
+      const rem = $('#remaining');
+      return { tab: ui.tab, date: ui.date, rings, remaining: rem && fresh(rem.dataset.fxAt, 650) ? +rem.dataset.fxFrom : num(rem) };
+    }
+    // a pill slides from where it was to where it is now (start there, then let it go)
+    function slide(el, key, x, w, i, reduce) {
+      const was = pills[key];
+      if (was && (was.x !== x || was.w !== w) && !reduce) {
+        el.style.transition = 'none';
+        el.style.transform = `translateX(${was.x}px)`; el.style.width = `${was.w}px`;
+        void el.offsetWidth;
+        el.style.transition = '';
+      }
+      el.style.transform = `translateX(${x}px)`; el.style.width = `${w}px`;
+      pills[key] = { x, w, i };
+      return !!was && was.i !== i;
+    }
+    function after(b) {
+      const reduce = reduceMotion();
+      if (b && b.tab === ui.tab && b.date === ui.date && !reduce) {
+        ringKeys().forEach(({ svg, key }) => {
+          const c = svg.querySelectorAll('circle')[1], from = b.rings[key];
+          if (!c || from == null || from === c.getAttribute('stroke-dasharray')) return;
+          c.style.setProperty('--from', from); c.classList.add('sweep'); c.dataset.sweepAt = Date.now();
+        });
+        const rem = $('#remaining'), to = num(rem);
+        if (rem && b.remaining != null && to != null && to !== b.remaining) countTo(rem, b.remaining, to);
+      }
+      // the tab pill
+      const nav = document.querySelector('nav'), pill = nav && nav.querySelector('.tabpill'), on = nav && nav.querySelector('button.on');
+      if (pill && on) { slide(pill, 'tab', on.offsetLeft + 5, on.offsetWidth - 10, on.dataset.tab, reduce); nav.classList.add('pilled'); }
+      // every switch (Week / 30 / 90, Recent / Frequent, % / grams …)
+      let switched = false;
+      document.querySelectorAll('.seg').forEach((seg, n) => {
+        const btns = [...seg.querySelectorAll('button')], i = btns.findIndex(x => x.classList.contains('on'));
+        if (i < 0) return;
+        let p = seg.querySelector('.segpill');
+        if (!p) { p = document.createElement('i'); p.className = 'segpill'; p.setAttribute('aria-hidden', 'true'); seg.prepend(p); }
+        const key = (seg.id || 'seg' + n) + '|' + (state.profile ? ui.tab + '|' + (ui.modal || '') : 'onb') + '|' + btns.length;
+        switched = slide(p, key, btns[i].offsetLeft, btns[i].offsetWidth, i, reduce) || switched;
+        seg.classList.add('pilled');
+      });
+      if (switched) haptic('selection');
+      // logging: a light tap; the water goal: sparks and a success tap
+      if (!state.profile) { day = null; return; }
+      const t = Core.dayTotals(state, ui.date), cups = Core.waterFor(state, ui.date), goal = state.waterGoal || 8;
+      const now = { date: ui.date, food: t.food.cal, ex: t.exercise, cups };
+      if (day && day.date === now.date) {
+        if (now.food > day.food || now.ex > day.ex) haptic('light');
+        if (now.cups !== day.cups) {
+          if (day.cups < goal && now.cups >= goal) {
+            haptic('success');
+            burst($('#waterUp') && $('#waterUp').closest('.card').querySelector('.ring'));
+            setTimeout(() => toast(tr('Water goal reached 💧')), 0); // after any "cup added" toast
+          } else haptic('light');
+        }
+      }
+      day = now;
+    }
+    return { capture, after };
+  })();
   let lastTab = null, lastModal = null; // web: cards rise in when a tab opens and sheets when they open, not on every re-render
   function render() {
     stopScan(); // render replaces the DOM, so any live camera stream must be released
     applyTheme();
     applyLang();
     const app = $('#app');
-    if (!state.profile) { app.innerHTML = onboardingHTML(); bindOnboarding(); lastTab = null; return; }
-    if (WEB) {
+    if (!state.profile) { app.innerHTML = onboardingHTML(); bindOnboarding(); lastTab = null; if (GLASS) motion.after(null); return; }
+    const before = GLASS ? motion.capture() : null;
+    if (GLASS) {
       app.classList.toggle('enter', ui.tab !== lastTab); lastTab = ui.tab;
       app.classList.toggle('sheet-in', !!ui.modal && ui.modal !== lastModal); lastModal = ui.modal;
     }
-    app.innerHTML = headerHTML() + (WEB ? minibarHTML() : '') + '<main id="main">' +
+    app.innerHTML = headerHTML() + (GLASS ? minibarHTML() : '') + '<main id="main">' +
       (ui.tab === 'diary' ? diaryHTML() : ui.tab === 'foods' ? foodsHTML() : ui.tab === 'progress' ? progressHTML() : ui.tab === 'sleep' ? sleepPageHTML() : settingsHTML()) +
       '</main>' + navHTML() + (ui.modal ? modalHTML() : '') + (!state.tourDone ? tourHTML() : '');
     bind();
     syncNative();
-    if (WEB) { keepStorage(); minibarSync(); }
+    if (WEB) keepStorage();
+    if (GLASS) { minibarSync(); motion.after(before); }
   }
 
   // ---------- FIRST-RUN TOUR ----------
@@ -5381,7 +5574,7 @@ const App = (() => {
     const h = document.querySelector('header'), m = $('#minibar');
     if (h && m) m.classList.toggle('show', h.getBoundingClientRect().bottom < 6);
   }
-  if (WEB) document.addEventListener('scroll', minibarSync, { passive: true, capture: true }); // the body scrolls, not the window
+  if (GLASS) document.addEventListener('scroll', minibarSync, { passive: true, capture: true }); // the body scrolls, not the window
   function headerHTML() {
     const t = Core.dayTotals(state, ui.date);
     const pct = Math.min(100, t.goal ? (t.food.cal / (t.goal + t.exercise)) * 100 : 0);
@@ -6350,7 +6543,7 @@ const App = (() => {
     }
     return `<div class="modal" id="modal"><div class="sheet" role="dialog" aria-label="${tr('Diary complete')}">
       <div class="sheet-h"><h3>${tr('Diary complete')}</h3><button id="closeModal" aria-label="${tr('Close')}">✕</button></div>
-      <div class="sheet-b">${body}<button class="btn" id="completeDone" style="margin-top:14px">${tr('Done')}</button></div></div></div>`;
+      <div class="sheet-b">${GLASS && pr ? `<div class="donecheck" id="doneCheck" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="var(--green)" stroke-width="5" stroke-linecap="round" transform="rotate(-90 32 32)"/><path d="M20 33l8 8 16-17" fill="none" stroke="var(--green)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>` : ''}${body}<button class="btn" id="completeDone" style="margin-top:14px">${tr('Done')}</button></div></div></div>`;
   }
   function quickAddModalHTML() {
     const tiles = [
@@ -6685,7 +6878,7 @@ const App = (() => {
   function navHTML() {
     const tab = ([k, ic, l]) =>
       `<button data-tab="${k}" class="${ui.tab === k || (k === 'progress' && ui.tab === 'sleep') ? 'on' : ''}" aria-label="${tr(l)}"><span class="ic">${ic}</span>${tr(l)}</button>`;
-    return `<nav>${tab(['diary','📖','Diary'])}${tab(['foods','🍽','Foods'])}
+    return `<nav>${GLASS ? '<i class="tabpill" aria-hidden="true"></i>' : ''}${tab(['diary','📖','Diary'])}${tab(['foods','🍽','Foods'])}
       <button id="navPlus" class="navplus" aria-label="${tr('Add')}"><span>+</span></button>
       ${tab(['progress','📈','Progress'])}${tab(['settings','⚙️','Settings'])}</nav>`;
   }
@@ -7025,7 +7218,7 @@ const App = (() => {
     $('#dateJump')?.addEventListener('change', e => {
       if (/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)) { ui.date = e.target.value; render(); }
     });
-    document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => { ui.tab = b.dataset.tab; render(); }));
+    document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => { if (ui.tab !== b.dataset.tab) haptic('selection'); ui.tab = b.dataset.tab; render(); }));
     // the Sleep area: in from the diary strip and the Progress card, back to Progress
     ['#sleepStrip', '#sleepOpen', '#sleepTeaser'].forEach(sel => $(sel)?.addEventListener('click', () => { ui.tab = 'sleep'; render(); window.scrollTo(0, 0); }));
     $('#sleepCard')?.addEventListener('click', e => { if (!e.target.closest('#sleepOpen')) { ui.tab = 'sleep'; render(); window.scrollTo(0, 0); } });
@@ -7160,7 +7353,10 @@ const App = (() => {
       set(Core.endFast(state, Date.now()));
       toast(tr('Fast ended'));
     });
-    $('#completeDay')?.addEventListener('click', () => { ui.modal = 'complete'; render(); });
+    $('#completeDay')?.addEventListener('click', () => {
+      ui.modal = 'complete'; render();
+      if ($('#doneCheck')) { haptic('success'); setTimeout(() => burst($('#doneCheck')), 420); }
+    });
     $('#completeDone')?.addEventListener('click', () => { ui.modal = null; render(); });
     $('#modal')?.addEventListener('click', e => { if (e.target.id === 'modal') { ui.modal = null; render(); } });
     document.querySelectorAll('[data-mtab]').forEach(b => b.addEventListener('click', () => {

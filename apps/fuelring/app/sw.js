@@ -1,7 +1,7 @@
 // FuelRing web app: works offline after the first visit.
 // build.js fills in the version (a hash of the files) and the file list, so
 // every release gets a new cache and the old one is dropped.
-const VERSION = 'f66238c5fbb5';
+const VERSION = '5e6c5c66d5af';
 const CACHE = 'fuelring-' + VERSION;
 const FILES = ["./","./index.html","./manifest.webmanifest","./icons/apple-touch-icon.png","./icons/favicon-32.png","./icons/icon-192.png","./icons/icon-512.png"];
 
