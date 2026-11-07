@@ -87,6 +87,10 @@ function home() {
 
 /* ---------- App landing ---------- */
 function appPage(a) {
+  // A hand-built landing page (content/landing/<key>.html) replaces the
+  // generated one. It is a complete HTML document with its own assets.
+  const landing = read(path.join(ROOT, 'content', 'landing', `${a.key}.html`));
+  if (landing) { write(`apps/${a.key}/index.html`, landing); return; }
   const r = '../../';
   const feats = a.features.map(f => `<li><strong>${esc(f.title)}</strong><span>${esc(f.detail)}</span></li>`).join('');
   const points = (a.privacy.dataPoints || []).map(p => `<li>${esc(p)}</li>`).join('');
