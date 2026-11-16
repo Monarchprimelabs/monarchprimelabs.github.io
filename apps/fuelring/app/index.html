@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FuelRing">
-<script>window.__FR_EDITION = 'web'; window.__FR_IOS_LIVE = '1.0.1';
+<script>window.__FR_EDITION = 'web'; window.__FR_IOS_LIVE = '1.0.2';
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
   addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
 }</script>
@@ -243,6 +243,20 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   .fresult .fn{font-weight:600;font-size:14px}
   .fresult .fs{font-size:12px;color:var(--mut)}
   .fresult .fc{font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}
+  .fresult .fright{display:flex;align-items:center;gap:10px;flex:none}
+  .fresult.picked{border-color:var(--orange)}
+  .fsel{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);background:transparent;display:grid;place-items:center;padding:0;cursor:pointer;flex:none}
+  .fsel svg{width:16px;height:16px;fill:none;stroke:transparent;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+  .fsel.on{background:var(--orange);border-color:var(--orange)}
+  .fsel.on svg{stroke:#fff}
+  .fsel:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .multibar{position:sticky;bottom:6px;display:flex;gap:8px;align-items:center;padding:8px;margin:8px -8px 0;background:var(--card);border-radius:16px;box-shadow:0 6px 20px rgba(0,40,80,.14)}
+  .multibar .btn{flex:1;margin:0}
+  .multibar .addrow{width:auto;margin:0;padding:10px 12px}
+  .mpick{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:10px;background:var(--field)}
+  .mpick-h{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .mpick .fs{font-size:12px;color:var(--mut)}
+  .mrm{border:0;background:transparent;color:var(--mut);font-size:16px;cursor:pointer;padding:2px 6px}
   .stepper{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:14px}
   .stepper button{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--field);font-size:20px;cursor:pointer;color:var(--navy)}
   .stepper input{width:72px;text-align:center;font-size:20px;font-weight:800;border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--field);color:var(--navy)}
@@ -1553,10 +1567,54 @@ const Core = (() => {
     };
   }
 
-  function offProductToFood(json) {
+  // Most beer, seltzer and canned-cocktail listings on Open Food Facts carry a
+  // name and no calories (US alcohol labels aren't FDA nutrition labels), some
+  // say 0, and some are plainly wrong. When the scanned name is one of the
+  // drinks in the food data, its per-can numbers are the ones to use. A match needs
+  // every meaningful word on both sides to agree, so a flavor or another product
+  // ("Bud Light Strawberry Limonade", "Non-Alcoholic Blue Moon") never borrows
+  // the plain one's numbers. Packaging and filler words don't count.
+  const DRINK_FILLER = new Set(['beer', 'cerveza', 'lager', 'stout', 'ale', 'iced', 'can', 'cans', 'bottle', 'bottles',
+    'hard', 'original', 'classic', 'the', 'brewing', 'brewery', 'company', 'co', 'inc', 'pack', 'pk', 'fl', 'oz', 'ml',
+    'cl', 'l', 's', 'premium', 'and', 'with']);
+  const drinkWords = s => deaccent(String(s || '').toLowerCase()).replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, ' ')
+    .split(' ').filter(w => w && !DRINK_FILLER.has(w) && !/\d/.test(w));
+  function matchSeedDrink(db, ...names) {
+    const NON_ALC = /non[\s-]*alcoholic|alcohol[\s-]*free|sin alcohol|\b0[.,]0\b|\bna\b|\bzero\b/i;
+    for (const name of names) {
+      if (!name || NON_ALC.test(name)) continue;
+      const got = new Set(drinkWords(name));
+      if (got.size < 1) continue;
+      let best = null;
+      for (const f of db || []) {
+        if (!f || !f.alc) continue;
+        const want = drinkWords(f.name);
+        if (!want.length) continue;
+        // the same words ("Coors Light"), or a shorter form of the seed's name
+        // ("Blue Moon" for Blue Moon Belgian White, "Guinness" for Guinness
+        // Draught). Ties go to the drink listed first: the food data keeps the
+        // common versions first, so "White Claw" is the regular one, not Surge.
+        const same = want.every(w => got.has(w)) && [...got].every(w => want.includes(w));
+        const shorter = !same && (got.size >= 2 || [...got][0].length >= 4) && [...got].every(w => want.includes(w));
+        if (!same && !shorter) continue;
+        const score = (same ? 100 : 0) - want.length;
+        if (!best || score > best.score) best = { f, score };
+      }
+      if (best) return best.f;
+    }
+    return null;
+  }
+  const seedDrinkFood = f => ({ name: f.name, serving: f.serving, cal: f.cal, c: f.c, p: f.p, f: f.f,
+    fib: f.fib || 0, sug: f.sug || 0, sod: f.sod || 0, sat: f.sat || 0, chol: f.chol || 0, alc: 1, known: 1 }); // known: real numbers, not an estimate
+
+  // db (optional): the seed foods. A scanned drink the food data knows by name
+  // takes its numbers from there: beer listings are often blank, or per 100 g,
+  // or simply wrong (a can of Kona listed at 463 kcal). Everything else keeps
+  // its own label. The result only prefills Create Food, so it can be edited.
+  function offProductToFood(json, db) {
     const prod = json && json.product;
-    if (!prod || !prod.nutriments) return null;
-    const n = prod.nutriments;
+    if (!prod) return null;
+    const n = prod.nutriments || {}; // some listings are a name and nothing else
     // Many OFF entries carry energy only in kJ (the bare energy_* fields are
     // kJ by OFF convention); fall back to converting so those products don't
     // read as "no calories" and get misrouted to the alcohol estimator.
@@ -1574,8 +1632,19 @@ const Core = (() => {
     const brand = prod.brands ? String(prod.brands).split(',')[0].trim() : '';
     const pname = String(prod.product_name || '').trim();
     const offName = (brand && !hasWords(pname, brand) ? `${brand} ${pname}` : pname || brand).trim();
-    // a bottle with no calorie data is usually a spirit — compute the shot
-    if (!Number.isFinite(cal) || cal <= 0) {
+    // A label that really says 0 (Coke Zero, Diet Pepsi, sparkling water) is a
+    // zero-calorie food, not missing data. Only a stated strength (ABV) or a
+    // known drink makes a 0 or a blank mean "alcohol, numbers not on file".
+    const abv = [n.alcohol_100g, n.alcohol_value, n.alcohol].find(v => Number.isFinite(v) && v > 0);
+    const zero = Number.isFinite(cal) && Math.round(cal) === 0;
+    const seed = matchSeedDrink(db, offName, pname);
+    if (seed) return seedDrinkFood(seed);
+    // A 0 on a bottle that names a drink ("Truly Hard Seltzer Grapefruit", a
+    // vodka) is a listing with the number missing; on a soda or water it's real.
+    const SOFT = /\b(zero|diet|sugar[\s-]*free|water|soda|cola|sparkling water|tonic)\b/i;
+    const drinkNamed = zero && !SOFT.test(offName) && !!drinkKindFrom([offName, prod.categories, prod.generic_name].filter(Boolean).join(' '));
+    // no calorie data (or a 0 next to a strength): usually a spirit — compute the shot
+    if (!Number.isFinite(cal) || cal < 0 || (zero && abv) || drinkNamed) {
       return offName ? alcoholFromOFF(prod, offName) : null;
     }
     const name = offName;
@@ -3141,7 +3210,7 @@ const Core = (() => {
     mealTotals, dayTotals, healthExercise, activityIncluded, setHealthExercise, reviewActivity, workoutName, sleepWeek, sleepRange, collapseSources, weeklyStats, weeklyNutrition, weekRecap, validDayShift, dayShiftPlan, goalsForDate, latestSteps, latestBurn, streakBadge, addCustomFood, searchFoods, checkInWeight,
     trendWeight, adaptiveTDEE, setTdeeOverride, weekBudget,
     setTourDone,
-    normalizeBarcode, lookupBarcode, expandUPCE, offProductToFood, alcoholFromOFF, setOnlineLookup,
+    normalizeBarcode, lookupBarcode, expandUPCE, offProductToFood, alcoholFromOFF, matchSeedDrink, setOnlineLookup,
     setTheme, coachInsight, netCarbs, setNetCarbs, diaryCSV, setPro,
     setAccent, setReminder, reminderSchedule, widgetSnapshot,
     parseHealthRecords, importHealth,
@@ -4602,6 +4671,37 @@ const FOOD_DB = [
   { id: 'f1389', name: "Pierogi, potato & cheese, 5 pieces", es: "Pierogis de papa con queso, 5 piezas", serving: "5 pieces (190g)", cal: 340, c: 52, p: 10, f: 10, fib: 2.5, sug: 2, sod: 540, sat: 4, chol: 25 },
   { id: 'f1390', name: "Pork schnitzel", es: "Milanesa de cerdo empanizada (schnitzel)", serving: "1 piece (180g)", cal: 450, c: 20, p: 32, f: 27, fib: 1, sug: 1, sod: 480, sat: 6, chol: 110 },
 
+  // --- 2026-11: zero-sugar sodas, Surfside, and the beers, ciders and seltzers people scan (brand-published, per 12 fl oz) ---
+  { id: 'f1391', name: 'Coca-Cola Zero Sugar, can', es: 'Coca-Cola Sin Azúcar, lata', serving: '12 fl oz (355ml)', cal: 0, c: 0, p: 0, f: 0, barcode: '049000042566', fib: 0, sug: 0, sod: 40, sat: 0, chol: 0 },
+  { id: 'f1392', name: 'Pepsi Zero Sugar, can', es: 'Pepsi Sin Azúcar, lata', serving: '12 fl oz (355ml)', cal: 0, c: 0, p: 0, f: 0, fib: 0, sug: 0, sod: 60, sat: 0, chol: 0 },
+  { id: 'f1393', name: 'Diet Pepsi, can', es: 'Pepsi Light, lata', serving: '12 fl oz (355ml)', cal: 0, c: 0, p: 0, f: 0, fib: 0, sug: 0, sod: 35, sat: 0, chol: 0 },
+  { id: 'f1394', name: 'Sprite, can', es: 'Sprite, lata', serving: '12 fl oz (355ml)', cal: 140, c: 38, p: 0, f: 0, fib: 0, sug: 38, sod: 65, sat: 0, chol: 0 },
+  { id: 'f1395', name: 'Sprite Zero Sugar, can', es: 'Sprite Sin Azúcar, lata', serving: '12 fl oz (355ml)', cal: 0, c: 0, p: 0, f: 0, fib: 0, sug: 0, sod: 65, sat: 0, chol: 0 },
+  { id: 'f1396', name: 'Dr Pepper, can', es: 'Dr Pepper, lata', serving: '12 fl oz (355ml)', cal: 150, c: 40, p: 0, f: 0, fib: 0, sug: 39, sod: 55, sat: 0, chol: 0 },
+  { id: 'f1397', name: 'Dr Pepper Zero Sugar, can', es: 'Dr Pepper Sin Azúcar, lata', serving: '12 fl oz (355ml)', cal: 0, c: 0, p: 0, f: 0, fib: 0, sug: 0, sod: 55, sat: 0, chol: 0 },
+  { id: 'f1398', name: 'Heineken 0.0 non-alcoholic', es: 'Heineken 0.0 sin alcohol', serving: '12 fl oz (355ml)', cal: 69, c: 16, p: 1, f: 0, fib: 0, sug: 12, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1399', name: 'Surfside Iced Tea + Vodka', es: 'Surfside té helado con vodka', alc: 1, serving: '12 fl oz (355ml)', cal: 100, c: 2, p: 0, f: 0, fib: 0, sug: 1, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1400', name: 'Surfside Lemonade + Vodka', es: 'Surfside limonada con vodka', alc: 1, serving: '12 fl oz (355ml)', cal: 100, c: 2, p: 0, f: 0, fib: 0, sug: 1, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1401', name: 'Coors Banquet', es: 'Coors Banquet', alc: 1, serving: '12 fl oz (355ml)', cal: 147, c: 11.7, p: 1.4, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1402', name: 'Corona Light', es: 'Corona Light', alc: 1, serving: '12 fl oz (355ml)', cal: 99, c: 5, p: 0.8, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1403', name: 'Michelob Ultra Pure Gold', es: 'Michelob Ultra Pure Gold', alc: 1, serving: '12 fl oz (355ml)', cal: 85, c: 2.5, p: 0.6, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1404', name: 'Bud Light Lime', es: 'Bud Light Lime', alc: 1, serving: '12 fl oz (355ml)', cal: 116, c: 8, p: 0.9, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1405', name: 'Keystone Light', es: 'Keystone Light', alc: 1, serving: '12 fl oz (355ml)', cal: 101, c: 4.7, p: 0.7, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1406', name: 'Busch', es: 'Busch', alc: 1, serving: '12 fl oz (355ml)', cal: 114, c: 6.9, p: 0.9, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1407', name: 'Lagunitas IPA', es: 'Lagunitas IPA', alc: 1, serving: '12 fl oz (355ml)', cal: 180, c: 16, p: 2, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1408', name: 'Voodoo Ranger IPA', es: 'Voodoo Ranger IPA', alc: 1, serving: '12 fl oz (355ml)', cal: 210, c: 17, p: 2, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1409', name: 'New Belgium Fat Tire Amber Ale', es: 'New Belgium Fat Tire (ámbar)', alc: 1, serving: '12 fl oz (355ml)', cal: 160, c: 13, p: 2, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1410', name: 'Goose Island IPA', es: 'Goose Island IPA', alc: 1, serving: '12 fl oz (355ml)', cal: 180, c: 14, p: 2, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1411', name: 'Kona Big Wave Golden Ale', es: 'Kona Big Wave (dorada)', alc: 1, serving: '12 fl oz (355ml)', cal: 132, c: 11, p: 1, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1412', name: 'Shiner Bock', es: 'Shiner Bock', alc: 1, serving: '12 fl oz (355ml)', cal: 142, c: 13, p: 1.2, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1413', name: "Leinenkugel's Summer Shandy", es: "Leinenkugel's Summer Shandy", alc: 1, serving: '12 fl oz (355ml)', cal: 150, c: 17, p: 1, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1414', name: 'Dogfish Head 60 Minute IPA', es: 'Dogfish Head 60 Minute IPA', alc: 1, serving: '12 fl oz (355ml)', cal: 209, c: 19, p: 2, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1415', name: 'Founders All Day IPA', es: 'Founders All Day IPA', alc: 1, serving: '12 fl oz (355ml)', cal: 147, c: 12, p: 1.5, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1416', name: "Bell's Two Hearted IPA", es: "Bell's Two Hearted IPA", alc: 1, serving: '12 fl oz (355ml)', cal: 212, c: 16, p: 2, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1417', name: 'Stone IPA', es: 'Stone IPA', alc: 1, serving: '12 fl oz (355ml)', cal: 215, c: 17, p: 2, f: 0, fib: 0, sug: 0, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1418', name: 'Angry Orchard Crisp Apple Hard Cider', es: 'Sidra Angry Orchard Crisp Apple', alc: 1, serving: '12 fl oz (355ml)', cal: 194, c: 30, p: 0, f: 0, fib: 0, sug: 23, sod: 10, sat: 0, chol: 0 },
+  { id: 'f1419', name: 'Topo Chico Hard Seltzer', es: 'Topo Chico Hard Seltzer', alc: 1, serving: '12 fl oz (355ml)', cal: 100, c: 2, p: 0, f: 0, fib: 0, sug: 0, sod: 20, sat: 0, chol: 0 },
+  { id: 'f1420', name: 'White Claw Surge', es: 'White Claw Surge', alc: 1, serving: '12 fl oz (355ml)', cal: 250, c: 4, p: 0, f: 0, fib: 0, sug: 2, sod: 20, sat: 0, chol: 0 },
 ];
 
 
@@ -4650,7 +4750,7 @@ const App = (() => {
   }
   const reduceMotion = () => !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   let state = load();
-  let ui = { tab: 'diary', date: Core.todayISO(), modal: null, modalTab: 'search', listMode: 'recent', selFood: null, selMealId: null, mealCount: 1, servings: 1, unit: 'serving', query: '', scanBarcode: null, scanPrefill: null, scanManual: false, scanFailed: false, scanAutoNative: false, nutritionOpen: false, range: 'week', editFoodId: null, metric: 'waist', editEntry: null, editServings: 1, editUnit: 'serving', editExId: null, nutrient: 'p' };
+  let ui = { tab: 'diary', date: Core.todayISO(), modal: null, modalTab: 'search', listMode: 'recent', selFood: null, selMealId: null, picks: [], picksFor: null, multi: false, mealCount: 1, servings: 1, unit: 'serving', query: '', scanBarcode: null, scanPrefill: null, scanManual: false, scanFailed: false, scanAutoNative: false, nutritionOpen: false, range: 'week', editFoodId: null, metric: 'waist', editEntry: null, editServings: 1, editUnit: 'serving', editExId: null, nutrient: 'p' };
 
   function load() {
     try { const raw = localStorage.getItem(KEY); if (raw) return Core.deserialize(raw); } catch (e) {}
@@ -4829,6 +4929,8 @@ const App = (() => {
     'Recent': 'Recientes', 'Frequent': 'Frecuentes', 'Foods you log often appear here.': 'Los alimentos que registras seguido aparecerán aquí.',
     'No matches — try Create Food or Quick Add.': 'Sin resultados — prueba Crear alimento o Agregado rápido.',
     'per serving': 'por porción', '‹ Back to search': '‹ Volver a la búsqueda',
+    'Select': 'Seleccionar', 'Clear': 'Quitar todo', 'Remove': 'Quitar',
+    'Set each amount, then add them all at once.': 'Ajusta cada cantidad y agrégalos todos juntos.',
     'Unit': 'Unidad', 'Amount': 'Cantidad', 'Less': 'Menos', 'More': 'Más',
     'Include the weight, like (200g), to also log it in grams or ounces.': 'Incluye el peso, como (200g), para registrarlo también en gramos u onzas.',
     'Start camera scan': 'Escanear con la cámara',
@@ -5105,7 +5207,7 @@ const App = (() => {
       if (!MEALS.some(m => m[0] === ui.modal)) return; // sheet closed while fetching
       if (food) {
         ui.scanBarcode = canon; ui.scanPrefill = food; ui.modalTab = 'create'; render();
-        toast(food.alc ? tr('Estimated for a standard pour — adjust if yours is bigger')
+        toast(food.alc && !food.known ? tr('Estimated for a standard pour — adjust if yours is bigger')
           : tr('Found online — check the values, then save'));
         return;
       }
@@ -5124,7 +5226,7 @@ const App = (() => {
         { signal: ctrl.signal });
       clearTimeout(t);
       if (!res.ok) return null;
-      return Core.offProductToFood(await res.json());
+      return Core.offProductToFood(await res.json(), FOOD_DB); // known drinks take their per-can numbers
     } catch (e) { return null; }
   }
   // Native-app bridge: inside the Expo wrapper there is no BarcodeDetector, but
@@ -5625,6 +5727,7 @@ const App = (() => {
     applyLang();
     const app = $('#app');
     if (ui.modal !== 'recap') ui.recapURL = null; // the recap picture (a few hundred KB) goes with its sheet
+    if (ui.modal !== ui.picksFor) { ui.picks = []; ui.multi = false; ui.picksFor = ui.modal; } // foods picked for one meal don't follow you to the next
     if (!state.profile) { app.innerHTML = onboardingHTML(); bindOnboarding(); syncNative(); lastTab = null; if (GLASS) motion.after(null); return; }
     const before = GLASS ? motion.capture() : null;
     if (GLASS) {
@@ -6743,10 +6846,60 @@ const App = (() => {
 
   // Center-+ sheet: every logging action one tap from anywhere in the app.
   // food search results; with an empty query, the Recent / Frequent lists
+  // Each row also has a circle: tap the row to log that one food, or tap
+  // circles to pick several and set their amounts together.
   function foodRowHTML(f, note) {
-    return `<div class="fresult" data-pick="${f.id}" role="button" tabindex="0">
+    const on = ui.picks.some(x => x.id === f.id);
+    return `<div class="fresult${on ? ' picked' : ''}" data-pick="${f.id}" role="button" tabindex="0">
       <div><div class="fn">${esc(fdName(f))}${f.custom ? ' <span style="color:var(--orange)">•</span>' : ''}</div><div class="fs">${esc(fdServ(f))}${note || ''}</div></div>
-      <div class="fc">${fmt(f.cal)}</div></div>`;
+      <div class="fright"><div class="fc">${fmt(f.cal)}</div><button type="button" class="fsel${on ? ' on' : ''}" data-sel="${f.id}" aria-pressed="${on}" aria-label="${tr('Select')} ${esc(fdName(f))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12.5l4 4 8-9"/></svg></button></div></div>`;
+  }
+  // the bar that appears once anything is picked
+  function multiBarHTML() {
+    const n = ui.picks.length;
+    if (!n) return '';
+    const es = state.lang === 'es';
+    return `<div class="multibar"><button class="btn" id="multiGo">${es ? `Agregar ${n} ${n === 1 ? 'alimento' : 'alimentos'}` : `Add ${n} ${n === 1 ? 'food' : 'foods'}`} ›</button>
+      <button type="button" class="addrow" id="multiClear">${tr('Clear')}</button></div>`;
+  }
+  // pick or unpick one food, starting at the amount it was last logged in
+  function togglePick(id, idea) {
+    const i = ui.picks.findIndex(x => x.id === id);
+    if (i >= 0) { ui.picks.splice(i, 1); return; }
+    const food = [...state.customFoods, ...FOOD_DB].find(f => f.id === id);
+    if (!food) return;
+    const last = idea ? null : Core.lastUnit(state, food);
+    ui.picks.push({ id, unit: last ? last.unit : 'serving', amount: last ? last.amount : 1 });
+  }
+  // the review step: every picked food with its own amount, then one tap logs them all
+  function multiReviewHTML(mealLabel) {
+    const es = state.lang === 'es', all = [...state.customFoods, ...FOOD_DB];
+    const tot = { cal: 0, c: 0, p: 0, f: 0 };
+    const rows = ui.picks.map((pk, i) => {
+      const f = all.find(x => x.id === pk.id);
+      if (!f) return '';
+      const units = Core.servingUnits(state, f);
+      if (!units.some(u => u.key === pk.unit)) { pk.unit = 'serving'; pk.amount = 1; }
+      const pr = Core.portion(state, f, pk.amount, pk.unit) || { cal: 0, c: 0, p: 0, f: 0 };
+      tot.cal += pr.cal; tot.c += pr.c; tot.p += pr.p; tot.f += pr.f;
+      return `<div class="mpick" data-mi="${i}">
+        <div class="mpick-h"><div><div class="fn">${esc(fdName(f))}</div><div class="fs">${fmt(pr.cal)} kcal · ${Math.round(pr.c)}g C · ${Math.round(pr.p)}g P · ${Math.round(pr.f)}g F</div></div>
+          <button type="button" class="mrm" data-mrm="${i}" aria-label="${tr('Remove')} ${esc(fdName(f))}">✕</button></div>
+        ${amountPickerHTML(f, units, pk.unit, pk.amount, { unit: 'mu-u-' + i, down: 'mu-d-' + i, input: 'mu-i-' + i, up: 'mu-p-' + i })}
+      </div>`;
+    }).join('');
+    const n = ui.picks.length;
+    return `<div class="selfood" id="multiReview">
+      <div class="fn">${es ? `${n} ${n === 1 ? 'alimento' : 'alimentos'} para ${mealLabel}` : `${n} ${n === 1 ? 'food' : 'foods'} for ${mealLabel}`}</div>
+      <div class="fs" style="color:var(--mut);font-size:13px">${tr('Set each amount, then add them all at once.')}</div>
+      ${rows}
+      <div class="macro-preview" id="multiTotal">
+        <span><b>${fmt(tot.cal)}</b> kcal</span><span><b>${Math.round(tot.c)}</b>g C</span>
+        <span><b>${Math.round(tot.p)}</b>g P</span><span><b>${Math.round(tot.f)}</b>g F</span>
+      </div>
+      <button class="btn" id="confirmMulti">${es ? `Agregar ${n} a ${mealLabel}` : `Add ${n} to ${mealLabel}`}</button>
+      <button class="addrow" id="multiBack" style="text-align:center">${tr('‹ Back to search')}</button>
+    </div>`;
   }
   function listSegHTML() {
     if (ui.query) return '';
@@ -7220,6 +7373,8 @@ const App = (() => {
     let body = '';
     if (ui.selMealId) {
       body = mealServingHTML();
+    } else if (ui.multi && ui.picks.length) {
+      body = multiReviewHTML(mealLabel);
     } else if (ui.selFood) {
       const f = ui.selFood;
       const units = Core.servingUnits(state, f);
@@ -7239,7 +7394,8 @@ const App = (() => {
       body = `<div class="search"><input id="foodQ" type="search" placeholder="${tr('Search foods…')}" value="${esc(ui.query)}" autocomplete="off"></div>
         <div id="listSeg">${listSegHTML()}</div>
         <div id="mealResults">${mealListHTML()}</div>
-        <div id="results">${searchListHTML()}</div>`;
+        <div id="results">${searchListHTML()}</div>
+        <div id="multiBar">${multiBarHTML()}</div>`;
     } else if (ui.modalTab === 'scan') {
       // Camera-first: the camera starts (or the native scanner opens) as soon as
       // this tab appears — see the auto-start block in bind(). Manual entry is
@@ -7785,25 +7941,31 @@ const App = (() => {
       if (b.dataset.mtab === 'scan') $('#bc-input')?.focus();
     }));
     const q = $('#foodQ');
-    if (q) q.addEventListener('input', () => {
-      ui.query = q.value;
+    // redraw the lists in place (the search box keeps its focus and text)
+    function refreshLists() {
       $('#listSeg').innerHTML = listSegHTML();
       $('#mealResults').innerHTML = mealListHTML();
       $('#results').innerHTML = searchListHTML();
-      bindPicks(); bindMealPicks(); bindListMode();
+      $('#multiBar').innerHTML = multiBarHTML();
+      bindPicks(); bindMealPicks(); bindListMode(); bindMultiBar();
+    }
+    if (q) q.addEventListener('input', () => {
+      ui.query = q.value;
+      refreshLists();
       if (GLASS) motion.pills(); // the switch comes back when the box is cleared
     });
-    bindPicks(); bindMealPicks(); bindListMode();
+    bindPicks(); bindMealPicks(); bindListMode(); bindMultiBar();
     function bindListMode() {
       document.querySelectorAll('[data-listmode]').forEach(b => b.addEventListener('click', () => {
         if (b.dataset.listmode === 'ideas' && !isPro()) return openPro();
         ui.listMode = b.dataset.listmode;
-        $('#listSeg').innerHTML = listSegHTML();
-        $('#mealResults').innerHTML = mealListHTML();
-        $('#results').innerHTML = searchListHTML();
-        bindPicks(); bindMealPicks(); bindListMode();
+        refreshLists();
         if (GLASS) motion.pills(); // redrawn in place (the search box keeps focus), so slide its pill here
       }));
+    }
+    function bindMultiBar() {
+      $('#multiGo')?.addEventListener('click', () => { ui.multi = true; render(); });
+      $('#multiClear')?.addEventListener('click', () => { ui.picks = []; refreshLists(); });
     }
     function bindMealPicks() {
       document.querySelectorAll('[data-pickmeal]').forEach(el => {
@@ -7833,10 +7995,44 @@ const App = (() => {
           if (el.dataset.idea) { ui.unit = 'serving'; ui.servings = 1; } // the serving the idea said fits, not the last amount
           render();
         };
-        el.addEventListener('click', go);
-        el.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+        el.addEventListener('click', e => { if (!e.target.closest('[data-sel]')) go(); });
+        el.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.target.closest('[data-sel]')) go(); });
       });
+      document.querySelectorAll('[data-sel]').forEach(b => b.addEventListener('click', e => {
+        e.stopPropagation();
+        togglePick(b.dataset.sel, !!b.closest('[data-idea]'));
+        haptic('selection');
+        refreshLists();
+      }));
     }
+    // the review step: amounts, remove, back, and one tap for all
+    ui.picks.forEach((pk, i) => {
+      const food = () => [...state.customFoods, ...FOOD_DB].find(f => f.id === pk.id);
+      $('#mu-p-' + i)?.addEventListener('click', () => { pk.amount = stepAmount(pk.unit, pk.amount, 1); render(); });
+      $('#mu-d-' + i)?.addEventListener('click', () => { pk.amount = stepAmount(pk.unit, pk.amount, -1); render(); });
+      $('#mu-i-' + i)?.addEventListener('change', e => { const v = +e.target.value; if (v > 0) pk.amount = Math.max(unitMin(pk.unit), v); render(); });
+      $('#mu-u-' + i)?.addEventListener('change', e => {
+        const to = e.target.value, conv = Core.convertAmount(state, food(), pk.amount, pk.unit, to);
+        pk.amount = conv != null ? conv : 1; pk.unit = to; render();
+      });
+    });
+    document.querySelectorAll('[data-mrm]').forEach(b => b.addEventListener('click', () => {
+      ui.picks.splice(+b.dataset.mrm, 1);
+      if (!ui.picks.length) ui.multi = false;
+      render();
+    }));
+    $('#multiBack')?.addEventListener('click', () => { ui.multi = false; render(); $('#foodQ')?.focus(); });
+    $('#confirmMulti')?.addEventListener('click', () => {
+      const all = [...state.customFoods, ...FOOD_DB];
+      let next = state, n = 0;
+      for (const pk of ui.picks) {
+        const f = all.find(x => x.id === pk.id);
+        if (f) { next = Core.logFood(next, ui.date, ui.modal, f, pk.amount, pk.unit); n++; }
+      }
+      ui.picks = []; ui.multi = false; ui.modal = null;
+      set(next);
+      toast(state.lang === 'es' ? `${n} ${n === 1 ? 'alimento registrado' : 'alimentos registrados'}` : `${n} ${n === 1 ? 'food' : 'foods'} logged`);
+    });
     // barcode scanner — camera-first: entering the Scan tab starts scanning
     // immediately instead of parking the user on a form.
     if (MEALS.some(m => m[0] === ui.modal) && ui.modalTab === 'scan' && !ui.selFood && !ui.selMealId) {
