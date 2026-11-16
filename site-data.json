@@ -176,7 +176,7 @@
       ],
       "privacy": {
         "hasPolicy": true,
-        "lastUpdated": "29 October 2026",
+        "lastUpdated": "16 November 2026",
         "summary": "A local-first app. Your records stay on your phone.",
         "sections": [
           {
@@ -194,8 +194,7 @@
           "Premium and the earlier Lifetime Pro are one-time purchases processed by Apple, not subscriptions. The app only learns from Apple whether they were bought.",
           "Data leaves the phone only when you share it yourself: a backup file, a CSV export, a report, or a progress card.",
           "The delete option in Settings erases your records from the phone. Deleting the app removes everything it stored."
-        ],
-        "notice": "This page summarizes how the app handles data. A full privacy policy for Monarch Prime Pin is being finalized and will be published here."
+        ]
       },
       "support": {
         "email": "monarchprimelabs@gmail.com",

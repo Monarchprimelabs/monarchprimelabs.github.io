@@ -95,6 +95,7 @@ function appPage(a) {
   const feats = a.features.map(f => `<li><strong>${esc(f.title)}</strong><span>${esc(f.detail)}</span></li>`).join('');
   const points = (a.privacy.dataPoints || []).map(p => `<li>${esc(p)}</li>`).join('');
   const disclaimers = (a.disclaimers || []).map(d => `<div class="note">${esc(d)}</div>`).join('');
+  const hasTerms = !!read(path.join(ROOT, 'content', 'terms', `${a.key}.html`));
   const policyLine = a.privacy.hasPolicy
     ? `<p><a href="privacy.html">Read the full ${esc(a.name)} privacy policy →</a></p>`
     : `<p><a href="privacy.html">Privacy at a glance →</a></p>`;
@@ -102,7 +103,7 @@ function appPage(a) {
 <section class="hero app"><div class="wrap">
   <div class="row"><img src="${r}assets/icons/${a.key}.png" alt="${esc(a.name)} icon" width="96" height="96">
   <div><h1>${esc(a.name)}</h1><p class="tag">${esc(a.tagline)}</p><span class="badge ${a.status}">${esc(STATUS[a.status].label)}</span></div></div>
-  <div class="cta">${storeButton(a)}<a class="btn ghost" href="support.html">Support</a><a class="btn ghost" href="privacy.html">Privacy</a></div>
+  <div class="cta">${storeButton(a)}<a class="btn ghost" href="support.html">Support</a><a class="btn ghost" href="privacy.html">Privacy</a>${hasTerms ? '<a class="btn ghost" href="terms.html">Terms</a>' : ''}</div>
 </div></section>
 <main><div class="wrap">
   <section class="section card"><h2>About</h2><p style="margin:0">${esc(a.summary)}</p></section>
@@ -146,6 +147,19 @@ ${(a.privacy.sections || []).map(s => `<h2>${esc(s.title)}</h2>\n<p>${esc(s.text
   <article class="article">${inner}</article>
 </div></main>`;
   write(`apps/${a.key}/privacy.html`, layout({ title: `${a.name} — Privacy Policy`, description: `Privacy policy for ${a.name} by ${a.publisher}.`, depth: 2, body, current: 'privacy' }));
+}
+
+/* ---------- Terms (only for apps with content/terms/<key>.html) ---------- */
+function termsPage(a) {
+  const frag = read(path.join(ROOT, 'content', 'terms', `${a.key}.html`));
+  if (!frag) return;
+  const r = '../../';
+  const body = `<main><div class="wrap narrow">
+  <p class="crumbs"><a href="${r}">Home</a> › <a href="./">${esc(a.name)}</a> › Terms</p>
+  <div class="mini" style="margin-bottom:16px"><img src="${r}assets/icons/${a.key}.png" alt="" width="36" height="36"><span>${esc(a.name)} by ${esc(a.publisher)}</span></div>
+  <article class="article"><div id="en"></div>${frag}</article>
+</div></main>`;
+  write(`apps/${a.key}/terms.html`, layout({ title: `${a.name} — Terms of Use`, description: `Terms of use for ${a.name} by ${a.publisher}.`, depth: 2, body }));
 }
 
 /* ---------- Support ---------- */
@@ -199,6 +213,6 @@ function extras() {
 }
 
 home();
-for (const a of data.apps) { appPage(a); privacyPage(a); supportPage(a); }
+for (const a of data.apps) { appPage(a); privacyPage(a); termsPage(a); supportPage(a); }
 hub('privacy'); hub('support'); notFound(); extras();
 console.log(`built ${pages.length} pages`);

@@ -12,7 +12,8 @@ Served by GitHub Pages from the `main` branch root at
 site-data.json          every app's facts (name, status, features, pricing, data points…)
 content/privacy/*.html  full privacy-policy text, ported verbatim from the app repos
 content/support/*.html  full support-page text (optional; FAQ from site-data otherwise)
-tools/build.js          generator — writes index.html, apps/<key>/{index,privacy,support}.html,
+content/terms/*.html    terms of use (optional; only apps with a fragment get a terms page)
+tools/build.js          generator — writes index.html, apps/<key>/{index,privacy,support,terms}.html,
                         privacy/, support/, 404.html, sitemap.xml, robots.txt
 assets/                 stylesheet + 512px app icons + site mark
 ```
